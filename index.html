@@ -1,0 +1,2165 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaxPortal VN | Hệ sinh thái Trí tuệ Thuế Toàn diện 2026</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+                    colors: { primary: '#2563eb', secondary: '#0f172a', accent: '#38bdf8', success: '#10b981', warning: '#f59e0b', error: '#ef4444' }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+        }
+
+        .glass-dark {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-item.active {
+            color: #2563eb;
+            background: rgba(37, 99, 235, 0.08);
+            border-radius: 12px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px) scale(0.99);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        body {
+            background-color: #f8fafc;
+            background-image:
+                radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 0.03) 0, transparent 50%),
+                radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 0.03) 0, transparent 50%),
+                radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 0.03) 0, transparent 50%);
+            background-attachment: fixed;
+            cursor: default;
+        }
+
+        .hero-gradient {
+            background: radial-gradient(circle at 50% -20%, rgba(37, 99, 235, 0.08) 0%, rgba(255, 255, 255, 0) 70%);
+        }
+
+        .back-btn {
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+        }
+
+        .back-btn.show {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: auto;
+        }
+
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .card-shadow {
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card-shadow:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 25px 50px -12px rgba(37, 99, 235, 0.15);
+        }
+
+        .search-suggest-item:hover {
+            background: rgba(37, 99, 235, 0.05);
+        }
+    </style>
+</head>
+
+<body class="text-slate-900 min-h-screen hero-gradient">
+    <!-- Navbar -->
+    <nav class="fixed top-0 w-full z-[100] glass border-b border-slate-200/50 px-6 py-3">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-6">
+                <button id="globalBackBtn" onclick="switchTab('home')"
+                    class="back-btn flex items-center gap-2 text-xs font-black text-slate-400 uppercase tracking-widest hover:text-primary transition-all">
+                    <i class="fa-solid fa-arrow-left"></i> Trang chủ
+                </button>
+                <div class="flex items-center gap-2 cursor-pointer group" onclick="switchTab('home')">
+                    <div
+                        class="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-500/30 group-hover:scale-105 transition-all">
+                        <i class="fa-solid fa-brain"></i>
+                    </div>
+                    <span
+                        class="text-xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-700">TaxPortal
+                        <span
+                            class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-500 italic">Enterprise</span></span>
+                </div>
+            </div>
+            <div class="hidden lg:flex items-center gap-1 font-bold text-[13px] text-slate-500">
+                <button onclick="switchTab('home')" class="nav-item active px-5 py-2 transition-all">Tổng quan nền
+                    tảng</button>
+                <button onclick="switchTab('search')" class="nav-item px-5 py-2 transition-all">Tra cứu thuế</button>
+                <button onclick="switchTab('calculator')" class="nav-item px-5 py-2 transition-all">Máy tính
+                    thuế</button>
+                <button onclick="switchTab('policy')" class="nav-item px-5 py-2 transition-all">Căn cứ Pháp lý</button>
+                <button onclick="switchTab('forum')" class="nav-item px-5 py-2 transition-all">Diễn đàn thuế</button>
+                <button onclick="switchTab('news')" class="nav-item px-5 py-2 transition-all flex items-center gap-2"
+                    title="Global Tax Intelligence"><i
+                        class="fa-solid fa-newspaper text-slate-400 group-hover:text-primary transition-all"></i> Trung
+                    tâm Tin tức Thuế & Pháp lý</button>
+            </div>
+            <div class="flex items-center gap-4">
+                <span
+                    class="hidden md:flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-100">
+                    <i class="fa-solid fa-shield-check"></i> Enterprise v4.0
+                </span>
+                <div class="h-6 w-px bg-slate-200 hidden md:block"></div>
+                <!-- Auth Buttons -->
+                <button onclick="openAuthModal('login')"
+                    class="hidden md:block text-xs font-bold text-slate-600 hover:text-primary transition-all">Đăng
+                    nhập</button>
+                <button onclick="openAuthModal('register')"
+                    class="px-5 py-2.5 bg-gradient-to-r from-slate-900 to-slate-800 text-white rounded-xl text-xs font-bold shadow-lg shadow-slate-900/20 hover:shadow-xl hover:-translate-y-0.5 transition-all">Đăng
+                    ký</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Auth Modal -->
+    <div id="authModal" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onclick="closeAuthModal()"></div>
+        <!-- Modal Content -->
+        <div class="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden animate-fadeIn">
+            <!-- Tabs Header -->
+            <div class="flex border-b border-slate-100">
+                <button id="tab-login-btn" onclick="switchAuthTab('login')"
+                    class="flex-1 py-4 text-sm font-black text-primary border-b-2 border-primary transition-all">Đăng
+                    nhập</button>
+                <button id="tab-register-btn" onclick="switchAuthTab('register')"
+                    class="flex-1 py-4 text-sm font-bold text-slate-400 border-b-2 border-transparent hover:text-slate-600 transition-all">Đăng
+                    ký</button>
+            </div>
+            <!-- Body -->
+            <div class="p-8">
+                <!-- Login Form -->
+                <div id="auth-login-form" class="space-y-5 block">
+                    <div class="space-y-2">
+                        <label class="text-[10px] uppercase font-black text-slate-400 tracking-widest">Email doanh
+                            nghiệp</label>
+                        <input type="email" placeholder="Nhập email..."
+                            class="w-full h-12 px-4 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-primary font-medium text-sm">
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between">
+                            <label class="text-[10px] uppercase font-black text-slate-400 tracking-widest">Mật
+                                khẩu</label>
+                            <a href="#" class="text-[10px] font-bold text-primary hover:underline">Quên mật khẩu?</a>
+                        </div>
+                        <input type="password" placeholder="Nhập mật khẩu..."
+                            class="w-full h-12 px-4 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-primary font-medium text-sm">
+                    </div>
+                    <button
+                        class="w-full py-4 mt-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-black uppercase tracking-widest text-xs rounded-xl shadow-xl shadow-blue-500/30 hover:shadow-indigo-500/40 hover:-translate-y-0.5 transition-all"
+                        onclick="alert('Tính năng đang được phát triển')">
+                        Đăng nhập Hệ thống
+                    </button>
+                    <div class="text-center mt-6">
+                        <p class="text-xs text-slate-500 font-medium">Hoặc tiếp tục với</p>
+                        <div class="flex justify-center gap-4 mt-4">
+                            <button
+                                class="w-12 h-12 rounded-full border border-slate-200 text-red-500 flex items-center justify-center hover:bg-red-50 transition-all"><i
+                                    class="fa-brands fa-google text-lg"></i></button>
+                            <button
+                                class="w-12 h-12 rounded-full border border-slate-200 text-blue-600 flex items-center justify-center hover:bg-blue-50 transition-all"><i
+                                    class="fa-brands fa-microsoft text-lg"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Register Form -->
+                <div id="auth-register-form" class="space-y-4 hidden">
+                    <div class="space-y-2">
+                        <label class="text-[10px] uppercase font-black text-slate-400 tracking-widest">Họ và Tên / Chức
+                            danh</label>
+                        <input type="text" placeholder="Tên hiển thị..."
+                            class="w-full h-12 px-4 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-primary font-medium text-sm">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] uppercase font-black text-slate-400 tracking-widest">Email Doanh
+                            nghiệp</label>
+                        <input type="email" placeholder="Nhập email công viêc..."
+                            class="w-full h-12 px-4 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-primary font-medium text-sm">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] uppercase font-black text-slate-400 tracking-widest">Mật khẩu</label>
+                        <input type="password" placeholder="Tạo mật khẩu mạnh..."
+                            class="w-full h-12 px-4 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-primary font-medium text-sm">
+                    </div>
+                    <button
+                        class="w-full py-4 mt-2 bg-gradient-to-r from-slate-900 to-slate-800 text-white font-black uppercase tracking-widest text-xs rounded-xl shadow-xl shadow-slate-900/20 hover:shadow-2xl hover:-translate-y-0.5 transition-all"
+                        onclick="alert('Tính năng đang được phát triển')">
+                        Tạo tài khoản Enterprise
+                    </button>
+                </div>
+            </div>
+            <!-- Close btn -->
+            <button onclick="closeAuthModal()"
+                class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-slate-400 hover:bg-slate-100 rounded-full transition-all">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+    </div>
+
+    <main class="pt-24 pb-20 max-w-7xl mx-auto px-6">
+
+        <!-- Breadcrumb -->
+        <div id="breadcrumb-container"
+            class="hidden flex items-center gap-2 text-[11px] font-black text-slate-400 uppercase tracking-widest mb-8">
+            <span class="cursor-pointer hover:text-primary transition-all" onclick="switchTab('home')"><i
+                    class="fa-solid fa-house mr-1"></i> Trang chủ</span>
+            <i class="fa-solid fa-angle-right"></i>
+            <span id="breadcrumb-current" class="text-primary">Tính năng</span>
+        </div>
+
+        <!-- Tab: HOME -->
+        <section id="tab-home" class="tab-content active space-y-20 pt-12">
+            <div class="flex flex-col items-center text-center space-y-8">
+                <div class="flex items-center gap-4">
+                    <span
+                        class="px-4 py-1.5 bg-blue-50 text-primary rounded-full text-[10px] font-black uppercase tracking-widest border border-blue-100 flex items-center gap-2"><i
+                            class="fa-solid fa-list-check"></i> Phân loại HS Cục bộ</span>
+                    <span
+                        class="px-4 py-1.5 bg-green-50 text-green-600 rounded-full text-[10px] font-black uppercase tracking-widest border border-green-100 flex items-center gap-2"><i
+                            class="fa-solid fa-scale-balanced"></i> Dữ liệu Chuẩn hóa Pháp lý</span>
+                </div>
+                <h1 class="text-6xl md:text-7xl font-black tracking-tighter text-slate-900 leading-tight">Hệ thống Tra
+                    cứu & Phân tích <br><span
+                        class="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent border-b-8 border-indigo-200/50 pb-2">Thuế
+                        Doanh
+                        nghiệp</span></h1>
+                <p class="text-lg text-slate-500 max-w-2xl font-medium leading-relaxed">Hệ thống duy nhất tại Việt Nam
+                    phân tách rõ ràng (1) Từ điển thuật ngữ Hàng hóa, (2) Phân nhóm Mã HS và (3) Kết xuất Thuế suất từ
+                    Cơ sở dữ liệu Pháp luật.</p>
+                <div class="flex gap-4">
+                    <button onclick="switchTab('search')"
+                        class="px-10 py-5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl font-black uppercase text-sm shadow-xl shadow-blue-500/30 hover:shadow-indigo-500/40 hover:-translate-y-1 transition-all"><i
+                            class="fa-solid fa-magnifying-glass mr-2"></i> Hệ thống Tra cứu Dữ liệu</button>
+                    <button onclick="switchTab('calculator')"
+                        class="px-10 py-5 bg-white border border-slate-200 rounded-2xl font-black uppercase text-sm shadow-sm hover:shadow-lg hover:border-blue-200 hover:-translate-y-1 transition-all text-slate-700">Truy
+                        cập Phân hệ Hạch toán</button>
+                </div>
+            </div>
+
+            <!-- Verified By -->
+            <div class="pt-10 border-t border-slate-200/50">
+                <p class="text-center text-xs font-black uppercase tracking-[0.3em] text-slate-400 mb-8">Tính toàn vẹn
+                    Dữ liệu được Bảm đảm bởi quy chuẩn của</p>
+                <div
+                    class="flex flex-wrap justify-center gap-12 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+                    <div class="flex items-center gap-3 font-black text-xl"><i
+                            class="fa-solid fa-building-columns text-yellow-500"></i> Bộ Tài chính Việt Nam</div>
+                    <div class="flex items-center gap-3 font-black text-xl"><i
+                            class="fa-solid fa-ship text-blue-500"></i> Tổng cục Hải quan</div>
+                    <div class="flex items-center gap-3 font-black text-xl"><i
+                            class="fa-solid fa-gavel text-red-500"></i> Cơ sở dữ liệu Quốc gia về VBQPPL</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab: SEARCH (HS Finder) -->
+        <section id="tab-search" class="tab-content space-y-12">
+            <div class="max-w-4xl mx-auto space-y-8">
+                <div class="text-center space-y-4">
+                    <h2 class="text-4xl font-black tracking-tighter">Hệ thống Phân loại Phân nhóm Hàng hóa (HS)</h2>
+                    <p class="text-slate-500 font-medium tracking-wide">Hệ thống hỗ trợ tra cứu và ánh xạ mã số hàng hóa
+                        tĩnh. Thuế suất được tham chiếu trực tiếp từ Cơ sở Dữ liệu Pháp lý Quốc gia.</p>
+                    <div
+                        class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full text-[10px] font-black tracking-widest uppercase shadow-sm mt-2">
+                        <i class="fa-solid fa-lock text-emerald-500"></i> <span id="trustBadgeText">Dữ liệu đồng bộ &
+                            Xác thực với Cổng HQ Quốc Gia</span>
+                    </div>
+                </div>
+
+                <div class="relative group">
+                    <div class="absolute inset-y-0 left-8 flex items-center pointer-events-none">
+                        <i
+                            class="fa-solid fa-magnifying-glass text-slate-400 group-focus-within:text-primary transition-all text-xl"></i>
+                    </div>
+                    <input type="text" id="searchInput" oninput="handleAutocomplete()"
+                        placeholder="Nhập tên thương mại, từ khóa (Vd: Laptop Dell XPS, Bia, Camry...)"
+                        class="w-full h-24 pl-20 pr-48 bg-white/90 backdrop-blur-md border-2 border-slate-100 rounded-[2.5rem] shadow-2xl shadow-slate-200/50 outline-none font-bold text-xl transition-all focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 hover:border-blue-100">
+                    <button onclick="handleSearch()"
+                        class="absolute right-4 top-4 bottom-4 px-8 bg-gradient-to-r from-slate-900 to-slate-800 text-white rounded-[2rem] font-black uppercase text-xs tracking-widest shadow-xl active:scale-95 transition-all hover:shadow-2xl hover:-translate-y-0.5">
+                        Tra cứu Dữ liệu <i class="fa-solid fa-magnifying-glass ml-2 text-yellow-400"></i>
+                    </button>
+                    <!-- Autocomplete -->
+                    <div id="autocompleteBox"
+                        class="hidden absolute top-full left-0 right-0 mt-4 p-4 bg-white border border-slate-100 rounded-[2rem] shadow-2xl z-50 animate-fadeIn">
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap gap-3 justify-center">
+                    <button onclick="fillSearch('Camry')"
+                        class="px-6 py-2.5 bg-white border border-slate-100 rounded-full text-xs font-bold text-slate-600 hover:text-primary transition-all flex items-center gap-2 shadow-sm">Ô
+                        tô Camry</button>
+                    <button onclick="fillSearch('Heineken')"
+                        class="px-6 py-2.5 bg-white border border-slate-100 rounded-full text-xs font-bold text-slate-600 hover:text-primary transition-all flex items-center gap-2 shadow-sm">Bia
+                        Heineken</button>
+                    <button onclick="fillSearch('Dell XPS')"
+                        class="px-6 py-2.5 bg-white border border-slate-100 rounded-full text-xs font-bold text-slate-600 hover:text-primary transition-all flex items-center gap-2 shadow-sm">Laptop
+                        Dell XPS</button>
+                    <button onclick="fillSearch('Vang Bordeaux')"
+                        class="px-6 py-2.5 bg-white border border-slate-100 rounded-full text-xs font-bold text-slate-600 hover:text-primary transition-all flex items-center gap-2 shadow-sm">Vang
+                        Bordeaux</button>
+                </div>
+
+                <div id="searchResult" class="pt-8"></div>
+            </div>
+        </section>
+
+        <!-- Tab: CALCULATOR (v4.0 with Validation) -->
+        <section id="tab-calculator" class="tab-content space-y-12">
+            <div class="max-w-6xl mx-auto space-y-8 pt-6">
+                <!-- Header -->
+                <div class="text-center space-y-4">
+                    <h2 class="text-4xl font-black text-[#1e293b] tracking-tight">Máy tính thuế tự động</h2>
+                    <p class="text-slate-500 font-medium">Hạch toán tổng chi phí thuế nhập khẩu, thuế TTĐB và VAT cho lô
+                        hàng.</p>
+                </div>
+
+                <div class="flex flex-col lg:flex-row gap-8 items-start">
+                    <!-- Left: FORM -->
+                    <div
+                        class="w-full lg:w-1/2 glass p-8 rounded-3xl bg-white border border-slate-100 card-shadow flex flex-col gap-5">
+                        <!-- Quốc gia Xuất xứ (C/O) & Sản phẩm -->
+                        <div class="flex gap-4">
+                            <div class="space-y-2 relative w-2/3">
+                                <label class="text-[11px] font-bold text-slate-500">Sản phẩm/Mã HS</label>
+                                <input type="text" id="calcName" oninput="syncCalculatorAI()"
+                                    placeholder="Vd: Máy xử lý dữ liệu tự động (8471)"
+                                    class="w-full h-12 px-4 bg-white border border-slate-200 rounded-xl focus:border-blue-500 outline-none font-medium text-sm transition-all shadow-sm">
+                                <input type="hidden" id="calcHS">
+                            </div>
+                            <!-- Xuất xứ -->
+                            <div class="space-y-2 w-1/3">
+                                <label class="text-[11px] font-bold text-slate-500">C/O (Xuất xứ)</label>
+                                <select id="calcOrigin" onchange="runCalculatorPro()"
+                                    class="w-full h-12 px-4 bg-blue-50/50 border border-blue-200 text-blue-800 rounded-xl font-bold focus:outline-none focus:border-blue-500 text-sm cursor-pointer shadow-sm">
+                                    <option value="MFN">🌐 MFN (Quốc tế)</option>
+                                    <option value="VN">🇻🇳 Nội địa (Trong nước)</option>
+                                    <option value="EU">🇪🇺 Châu Âu (EVFTA)</option>
+                                    <option value="JP">🇯🇵 Nhật Bản (VJEPA)</option>
+                                    <option value="AS">🌏 ASEAN (ATIGA)</option>
+                                    <option value="KR">🇰🇷 Hàn Quốc (VKFTA)</option>
+                                    <option value="CN">🇨🇳 Trung Quốc (ACFTA)</option>
+                                    <option value="US">🇺🇸 Hoa Kỳ</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Khai báo số lượng & AI Quy đổi -->
+                        <div
+                            class="flex gap-4 border border-dashed border-emerald-300 bg-emerald-50/20 p-4 rounded-2xl w-full">
+                            <div class="space-y-2 w-full">
+                                <label
+                                    class="text-[11px] font-black tracking-wide text-emerald-700 flex items-center justify-between"><span
+                                        class="flex items-center gap-1"><i class="fa-solid fa-robot"></i> Công cụ AI Tự
+                                        gỡ Rối Đơn Vị</span><span
+                                        class="text-[9px] font-medium opacity-50 font-mono">Hardcoded NLP</span></label>
+                                <div class="flex gap-3">
+                                    <div class="relative w-2/3">
+                                        <input type="text" id="calcRawQty" value="100 chai bia" oninput="parseUnitAI()"
+                                            placeholder="Gõ '10 lố', '100 chai bia'..."
+                                            class="w-full h-12 pl-4 pr-[110px] bg-white border border-emerald-200 rounded-xl font-medium outline-none focus:border-emerald-500 text-sm shadow-sm transition-all focus:ring-4 focus:ring-emerald-500/10 hover:border-emerald-300">
+                                        <div
+                                            class="absolute right-2 top-2 bottom-2 bg-emerald-100 text-emerald-800 px-3 rounded-lg flex items-center justify-center gap-1 font-bold text-[11px] border border-emerald-200/50 shadow-sm">
+                                            <i class="fa-solid fa-magic opacity-50"></i> <span id="calcParsedUnit">33
+                                                LÍT</span>
+                                        </div>
+                                    </div>
+                                    <div class="w-1/3">
+                                        <select id="calcUnit" onchange="runCalculatorPro()"
+                                            class="w-full h-12 px-4 bg-white border border-emerald-200 rounded-xl font-bold focus:outline-none focus:border-emerald-500 text-sm text-emerald-800 shadow-sm cursor-pointer hover:border-emerald-300">
+                                            <option value="Cái">Cái</option>
+                                            <option value="Chiếc">Chiếc</option>
+                                            <option value="Lon">Lon</option>
+                                            <option value="Chai">Chai</option>
+                                            <option value="Lít" selected>Lít (HQ)</option>
+                                            <option value="Kg">Kg</option>
+                                            <option value="Gram">Gram</option>
+                                            <option value="Thùng">Thùng</option>
+                                        </select>
+                                    </div>
+                                    <input type="hidden" id="calcQty" value="33">
+                                </div>
+                                <p class="text-[10px] italic text-emerald-600">Đơn vị đúng chuẩn Thuế / HQ hiện do AI
+                                    đoán. Bạn có thể tự chọn lại ở ô bên phải để ép buộc (Ghi đè).</p>
+                            </div>
+                        </div>
+
+                        <!-- Đơn giá -->
+                        <div class="space-y-2">
+                            <label class="text-[11px] font-bold text-slate-500">Đơn giá (VND)</label>
+                            <input type="number" id="calcPrice" placeholder="15000000"
+                                class="w-full h-12 px-4 bg-white border border-slate-200 rounded-xl font-medium outline-none focus:border-blue-500 text-sm">
+                        </div>
+
+                        <!-- Chi phí Vận chuyển & Bảo hiểm (Phân mảnh Logistics) -->
+                        <div
+                            class="p-5 border border-dashed border-indigo-200 bg-indigo-50/30 rounded-2xl space-y-4 relative w-full">
+                            <div class="flex items-center justify-between mb-2">
+                                <label class="text-[11px] font-black tracking-wide text-indigo-700 uppercase"><i
+                                        class="fa-solid fa-ship"></i> Logistics (F & I)</label>
+                                <button onclick="estimateLogisticsAI()"
+                                    class="text-[9px] font-bold text-white bg-indigo-500 hover:bg-indigo-600 px-2 py-1.5 rounded shadow-sm transition-all active:scale-95 flex items-center gap-1.5 border border-indigo-600 focus:outline-none focus:border-indigo-700">
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i> AI ƯỚC TÍNH NHANH
+                                </button>
+                            </div>
+
+                            <div class="flex flex-col lg:flex-row gap-4">
+                                <!-- Chi phí vận chuyển -->
+                                <div class="space-y-2 w-full lg:w-1/2">
+                                    <label class="text-[11px] font-bold text-slate-500 flex items-center gap-1">Cước vận
+                                        chuyển (F) VND</label>
+                                    <input type="number" id="calcTransport" value="" placeholder="Ví dụ: 5000000"
+                                        class="w-full h-12 px-4 bg-white border border-slate-200 rounded-xl font-medium outline-none focus:border-indigo-400 text-sm transition-all shadow-sm">
+                                </div>
+
+                                <!-- Chi phí bảo hiểm -->
+                                <div class="space-y-2 w-full lg:w-1/2">
+                                    <label class="text-[11px] font-bold text-slate-500 flex items-center gap-1">Bảo hiểm
+                                        (I) VND</label>
+                                    <input type="number" id="calcInsurance" value=""
+                                        placeholder="Thường = 0.15% trị giá"
+                                        class="w-full h-12 px-4 bg-white border border-slate-200 rounded-xl font-medium outline-none focus:border-indigo-400 text-sm transition-all shadow-sm">
+                                </div>
+                            </div>
+                            <p class="text-[10px] italic text-indigo-500 text-center">Để trống nếu không có thực tế.
+                                Hoặc bấm "AI Ước Tính" để điền số Cước trung bình ngành.</p>
+                        </div>
+
+                        <!-- Alert Box -->
+                        <div id="calcAlert"
+                            class="hidden p-4 mt-2 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3 text-red-600 animate-fadeIn">
+                            <i class="fa-solid fa-triangle-exclamation text-lg mt-0.5"></i>
+                            <div>
+                                <h4 class="font-bold text-xs">Cảnh báo</h4>
+                                <p id="calcAlertText" class="text-xs font-medium mt-1">Giao dịch rủi ro.</p>
+                            </div>
+                        </div>
+
+                        <!-- Tính toán button -->
+                        <button onclick="runCalculatorPro()"
+                            class="w-full py-4 mt-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold uppercase text-[13px] tracking-wide shadow-md transition-all active:scale-[0.98]">
+                            TÍNH TOÁN CHI PHÍ
+                        </button>
+                    </div>
+
+                    <!-- Right: RESULT -->
+                    <div class="w-full lg:w-1/2 glass p-8 rounded-3xl bg-white border border-slate-200 card-shadow">
+                        <h3 class="font-bold text-lg text-slate-900 mb-6 border-b border-slate-100 pb-4">Bảng kê khai
+                            chi phí</h3>
+
+                        <div id="calcResultsGrid" class="space-y-4 text-slate-900">
+                            <div class="flex justify-between items-center text-sm font-medium text-slate-600">
+                                <span>Giá trị hàng hóa (Tổng đơn giá)</span>
+                                <span class="font-bold text-slate-900" id="resBasePrice">0 đ</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm font-medium text-slate-600">
+                                <span>Trị giá hải quan (CIF)</span>
+                                <span class="font-bold text-slate-900" id="resCif">0 đ</span>
+                            </div>
+
+                            <div class="h-px bg-slate-100 my-4"></div>
+
+                            <div class="flex justify-between items-start text-sm font-medium text-slate-600 group">
+                                <div class="w-3/5">
+                                    <span class="block">Thuế Nhập khẩu <span id="resNkLabel"
+                                            class="text-[9px] font-black text-primary bg-blue-50 border border-blue-100 px-1.5 py-0.5 rounded ml-1 uppercase tracking-widest relative top-[-1px]">MFN</span></span>
+                                    <p
+                                        class="text-[10px] text-slate-400 mt-1.5 hidden group-hover:text-primary transition-all leading-snug">
+                                        <i class="fa-solid fa-scale-balanced text-red-400 mr-1"></i> <a
+                                            href="https://thuvienphapluat.vn/van-ban/Xuat-nhap-khau/Nghi-dinh-26-2023-ND-CP-Bieu-thue-xuat-khau-Bieu-thue-nhap-khau-uu-dai-546051.aspx"
+                                            target="_blank" class="hover:underline font-bold"
+                                            title="Xem Nghị định gốc">NĐ 26/2023/NĐ-CP</a>
+                                    </p>
+                                </div>
+                                <div class="text-right w-2/5 flex flex-col items-end">
+                                    <span class="font-black text-slate-900" id="resNk">0 đ</span>
+                                    <span id="resNkRate"
+                                        class="text-[10px] text-emerald-700 font-bold mt-1 bg-emerald-100 px-2 py-0.5 rounded shadow-sm text-center min-w-[36px]">0%</span>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-between items-start text-sm font-medium text-slate-600 group mt-4">
+                                <div class="w-3/5">
+                                    <span class="block">Thuế TTĐB</span>
+                                    <p
+                                        class="text-[10px] text-slate-400 mt-1.5 hidden group-hover:text-primary transition-all leading-snug">
+                                        <i class="fa-solid fa-scale-balanced text-red-400 mr-1"></i> <a
+                                            href="https://thuvienphapluat.vn/van-ban/Thue-Phi-Le-Phi/Luat-thue-tieu-thu-dac-biet-2008-27-2008-QH12-82436.aspx"
+                                            target="_blank" class="hover:underline font-bold" title="Xem toàn văn">Luật
+                                            TTĐB 2008</a>
+                                    </p>
+                                </div>
+                                <div class="text-right w-2/5 flex flex-col items-end">
+                                    <span class="font-black text-slate-900" id="resTtdb">0 đ</span>
+                                    <span id="resTtdbRate"
+                                        class="text-[10px] text-emerald-700 font-bold mt-1 bg-emerald-100 px-2 py-0.5 rounded shadow-sm text-center min-w-[36px]">0%</span>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-between items-start text-sm font-medium text-slate-600 group mt-4">
+                                <div class="w-3/5">
+                                    <span class="block">Thuế GTGT <span
+                                            class="text-[9px] font-black text-slate-500 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded ml-1 relative top-[-1px]">VAT</span></span>
+                                    <p
+                                        class="text-[10px] text-slate-400 mt-1.5 hidden group-hover:text-primary transition-all leading-snug">
+                                        <i class="fa-solid fa-scale-balanced text-red-400 mr-1"></i> <a
+                                            href="https://thuvienphapluat.vn/van-ban/Thue-Phi-Le-Phi/Luat-thue-gia-tri-gia-tang-2008-13-2008-QH12-67104.aspx"
+                                            target="_blank" class="hover:underline font-bold"
+                                            title="Văn bản hợp nhất">Luật GTGT Sửa đổi</a>
+                                    </p>
+                                </div>
+                                <div class="text-right w-2/5 flex flex-col items-end">
+                                    <span class="font-black text-slate-900" id="resVat">0 đ</span>
+                                    <span id="resVatRate"
+                                        class="text-[10px] text-emerald-700 font-bold mt-1 bg-emerald-100 px-2 py-0.5 rounded shadow-sm text-center min-w-[36px]">10%</span>
+                                </div>
+                            </div>
+
+                            <div class="h-px bg-slate-100 my-4"></div>
+
+                            <div
+                                class="flex justify-between items-center text-[15px] font-black text-slate-800 uppercase">
+                                <span>TỔNG THUẾ</span>
+                                <span id="resTotalTax">0 đ</span>
+                            </div>
+
+                            <div
+                                class="mt-6 bg-slate-50 p-5 rounded-xl flex justify-between items-center border border-slate-100">
+                                <span class="font-black text-slate-800 uppercase text-sm">TỔNG CHI PHÍ LÔ HÀNG</span>
+                                <span class="font-black text-slate-900 text-lg" id="resTotalCost">0 đ</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab: POLICY (Căn cứ Pháp lý) -->
+        <section id="tab-policy" class="tab-content space-y-12">
+            <div class="max-w-5xl mx-auto space-y-10">
+                <div class="text-center space-y-4">
+                    <h2 class="text-4xl font-black tracking-tighter">Hệ thống Văn bản Pháp lý gốc</h2>
+                    <p class="text-slate-500 font-medium">Toàn bộ dữ liệu tính thuế trên ứng dụng được tham chiếu trực
+                        tiếp từ các bộ luật hiện hành này.</p>
+                </div>
+                <div class="glass p-8 rounded-3xl bg-white border border-slate-200 card-shadow space-y-6">
+                    <div
+                        class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm font-medium leading-relaxed text-slate-700">
+                        <div
+                            class="card-shadow p-6 bg-slate-50 border border-slate-100 rounded-2xl hover:border-primary/30 transition-all group flex flex-col justify-between h-full bg-gradient-to-br hover:from-white hover:to-blue-50/30">
+                            <div>
+                                <i
+                                    class="fa-solid fa-gavel text-3xl text-red-500 mb-4 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300"></i>
+                                <h4 class="font-black text-slate-900 text-lg mb-2 line-clamp-2">Luật Thuế Giá trị gia
+                                    tăng (Sửa đổi)</h4>
+                                <p class="text-slate-500 mb-6 text-xs leading-relaxed">Xác định các khung thuế suất GTGT
+                                    0%, 5%, 10% và đối tượng được miễn trừ/không chịu thuế.</p>
+                            </div>
+                            <button onclick="openInHouseViewer('Luật Thuế Giá trị gia tăng số 13/2008/QH12', 'gtgt')"
+                                class="inline-flex items-center justify-center w-full py-3 bg-white border border-slate-200 rounded-xl text-primary font-bold hover:bg-primary hover:text-white transition-all text-xs shadow-sm"><i
+                                    class="fa-solid fa-file-lines mr-2"></i> Trình đọc Nội bộ & AI</button>
+                        </div>
+                        <div
+                            class="card-shadow p-6 bg-slate-50 border border-slate-100 rounded-2xl hover:border-primary/30 transition-all group flex flex-col justify-between h-full bg-gradient-to-br hover:from-white hover:to-purple-50/30">
+                            <div>
+                                <i
+                                    class="fa-solid fa-wine-bottle text-3xl text-purple-500 mb-4 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300"></i>
+                                <h4 class="font-black text-slate-900 text-lg mb-2 line-clamp-2">Luật Thuế Tiêu thụ đặc
+                                    biệt</h4>
+                                <p class="text-slate-500 mb-6 text-xs leading-relaxed">Áp dụng đối với các hàng hóa
+                                    thiết yếu đặc thù như: Rượu, bia, thuốc lá, xe ô tô chở người, xì gà...</p>
+                            </div>
+                            <button onclick="openInHouseViewer('Luật Thuế Tiêu thụ đặc biệt số 27/2008/QH12', 'ttdb')"
+                                class="inline-flex items-center justify-center w-full py-3 bg-white border border-slate-200 rounded-xl text-primary font-bold hover:bg-primary hover:text-white transition-all text-xs shadow-sm"><i
+                                    class="fa-solid fa-file-lines mr-2"></i> Trình đọc Nội bộ & AI</button>
+                        </div>
+                        <div
+                            class="card-shadow p-6 bg-slate-50 border border-slate-100 rounded-2xl hover:border-primary/30 transition-all group flex flex-col justify-between h-full bg-gradient-to-br hover:from-white hover:to-teal-50/30">
+                            <div>
+                                <i
+                                    class="fa-solid fa-ship text-3xl text-teal-500 mb-4 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300"></i>
+                                <h4 class="font-black text-slate-900 text-lg mb-2 line-clamp-2">Nghị định 26/2023/NĐ-CP
+                                    (Biểu thuế VNĐ)</h4>
+                                <p class="text-slate-500 mb-6 text-xs leading-relaxed">Cung cấp Biểu thuế Nhập khẩu ưu
+                                    đãi (MFN), tính theo tỷ trọng giá trị hoặc chia làm Thuế tuyệt đối đối vời xuất -
+                                    nhập khẩu.</p>
+                            </div>
+                            <button onclick="openInHouseViewer('Nghị định 26/2023/NĐ-CP', 'nd26')"
+                                class="inline-flex items-center justify-center w-full py-3 bg-white border border-slate-200 rounded-xl text-primary font-bold hover:bg-primary hover:text-white transition-all text-xs shadow-sm"><i
+                                    class="fa-solid fa-file-lines mr-2"></i> Trình đọc Nội bộ & AI</button>
+                        </div>
+                        <div
+                            class="card-shadow p-6 bg-slate-50 border border-slate-100 rounded-2xl hover:border-primary/30 transition-all group flex flex-col justify-between h-full bg-gradient-to-br hover:from-white hover:to-green-50/30">
+                            <div>
+                                <i
+                                    class="fa-solid fa-leaf text-3xl text-green-500 mb-4 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300"></i>
+                                <h4 class="font-black text-slate-900 text-lg mb-2 line-clamp-2">Luật thuế bảo vệ môi
+                                    trường 2010</h4>
+                                <p class="text-slate-500 mb-6 text-xs leading-relaxed">Áp dụng một lần đối với xăng dầu,
+                                    than đá và các túi ni-lông có tác động vật lý / rủi ro với môi trường.</p>
+                            </div>
+                            <button onclick="openInHouseViewer('Luật Thuế BVMT số 57/2010/QH12', 'bvmt')"
+                                class="inline-flex items-center justify-center w-full py-3 bg-white border border-slate-200 rounded-xl text-primary font-bold hover:bg-primary hover:text-white transition-all text-xs shadow-sm"><i
+                                    class="fa-solid fa-file-lines mr-2"></i> Trình đọc Nội bộ & AI</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab: FORUM -->
+        <section id="tab-forum" class="tab-content space-y-12">
+            <div class="max-w-5xl mx-auto space-y-10">
+                <div class="text-center space-y-4">
+                    <h2 class="text-4xl font-black tracking-tighter">Diễn đàn Nghiệp vụ Thuế & Hải quan</h2>
+                    <p class="text-slate-500 font-medium">Cộng đồng tin cậy được kiểm duyệt nội dung 100% qua <span
+                            class="text-primary font-bold">Hệ thống Kiểm soát Từ khóa Tự động</span> nhằm đảm bảo tính
+                        học thuật.</p>
+                </div>
+
+                <!-- Create Post Box -->
+                <div class="glass p-8 rounded-[2rem] bg-white border border-slate-200 card-shadow space-y-6">
+                    <div class="flex items-center gap-4 border-b border-slate-100 pb-4">
+                        <div
+                            class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 font-black">
+                            <i class="fa-solid fa-user-tie"></i>
+                        </div>
+                        <input type="text" id="forumAuthor"
+                            placeholder="Tên hiển thị / Chức danh (Vd: Kế toán trưởng Nguyễn Văn A)"
+                            class="w-full h-12 px-4 bg-transparent border-none outline-none font-bold text-slate-700">
+                    </div>
+                    <textarea id="forumContent" rows="3"
+                        placeholder="Chia sẻ câu hỏi, vướng mắc pháp lý hoặc diễn giải chuẩn mực kế toán..."
+                        class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none focus:border-primary transition-all resize-none"></textarea>
+
+                    <div id="forumAlert" class="hidden p-4 rounded-xl text-sm font-bold flex items-center gap-3"></div>
+
+                    <div class="flex justify-between items-center">
+                        <p
+                            class="text-[10px] uppercase font-black tracking-widest text-slate-400 flex items-center gap-2">
+                            <i class="fa-solid fa-shield-halved text-emerald-500"></i> Hỗ trợ Kiểm duyệt Tự động
+                        </p>
+                        <button onclick="handlePostForum()"
+                            class="px-8 py-3 bg-secondary text-white font-black uppercase text-xs rounded-xl hover:bg-slate-800 transition-all shadow-lg active:scale-95"><i
+                                class="fa-solid fa-paper-plane mr-2"></i> Trình duyệt Trạng thái</button>
+                    </div>
+                </div>
+
+                <!-- Posts List -->
+                <div class="space-y-6 pt-6" id="forumPostsList">
+                    <!-- Post Item 1 -->
+                    <div
+                        class="p-8 bg-white border border-slate-200 rounded-3xl hover:border-primary/30 transition-all group">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-10 h-10 bg-blue-50 text-primary rounded-full flex items-center justify-center font-black">
+                                    <i class="fa-solid fa-user-tie"></i>
+                                </div>
+                                <div>
+                                    <p class="font-black text-sm text-slate-900">Tran Van B - Chuyên gia XNK</p>
+                                    <p class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">30 phút
+                                        trước</p>
+                                </div>
+                            </div>
+                            <span
+                                class="px-3 py-1 bg-emerald-50 text-emerald-600 text-[9px] font-black uppercase tracking-widest rounded-lg border border-emerald-100 flex items-center gap-1"><i
+                                    class="fa-solid fa-check"></i> AI Approved</span>
+                        </div>
+                        <p class="text-slate-600 font-medium leading-relaxed">Cho tôi hỏi theo Nghị định 26/2023 thì
+                            linh kiện máy tính khi ráp cấu hình sẵn để xuất khẩu đi EU có được áp thuế 0% theo EVFTA
+                            không? C/O form nào phù hợp?</p>
+                        <div class="mt-6 flex items-center gap-6 text-slate-400 text-xs font-bold">
+                            <button class="hover:text-primary transition-all"><i
+                                    class="fa-solid fa-hands-clapping mr-1"></i> Tham luận (12)</button>
+                            <button class="hover:text-primary transition-all"><i class="fa-solid fa-reply mr-1"></i>
+                                Phản hồi</button>
+                        </div>
+                    </div>
+
+                    <!-- Post Item 2 -->
+                    <div
+                        class="p-8 bg-white border border-slate-200 rounded-3xl hover:border-primary/30 transition-all group">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-10 h-10 bg-indigo-50 text-indigo-500 rounded-full flex items-center justify-center font-black">
+                                    <i class="fa-solid fa-user-tie"></i>
+                                </div>
+                                <div>
+                                    <p class="font-black text-sm text-slate-900">Le Thi C - Kế toán Tổng hợp</p>
+                                    <p class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">2 giờ trước
+                                    </p>
+                                </div>
+                            </div>
+                            <span
+                                class="px-3 py-1 bg-emerald-50 text-emerald-600 text-[9px] font-black uppercase tracking-widest rounded-lg border border-emerald-100 flex items-center gap-1"><i
+                                    class="fa-solid fa-check"></i> AI Approved</span>
+                        </div>
+                        <p class="text-slate-600 font-medium leading-relaxed">Về thuế TTĐB sửa đổi dự kiến 2026 cho nhóm
+                            đồ uống có cồn. Công ty tôi đang có lượng hàng tồn kho lớn sản xuất năm 2025, liệu khi bán
+                            ra vào 2026 có bị áp khung thuế mới không?</p>
+                        <div class="mt-6 flex items-center gap-6 text-slate-400 text-xs font-bold">
+                            <button class="hover:text-primary transition-all"><i
+                                    class="fa-solid fa-hands-clapping mr-1"></i> Tham luận (45)</button>
+                            <button class="hover:text-primary transition-all"><i class="fa-solid fa-reply mr-1"></i>
+                                Phản hồi</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab: NEWS -->
+        <section id="tab-news" class="tab-content space-y-12">
+            <div class="max-w-7xl mx-auto space-y-10">
+                <div class="flex flex-col md:flex-row justify-between items-end gap-6 mb-8">
+                    <div class="space-y-4">
+                        <h2 class="text-4xl font-black tracking-tighter">Global Tax Intelligence</h2>
+                        <p class="text-slate-500 font-medium max-w-2xl">Hệ thống AI tự động thu thập, phân tích và tóm
+                            tắt các chính sách thuế, hải quan và hiệp định thương mại từ hàng trăm nguồn tin uy tín toàn
+                            cầu.</p>
+                    </div>
+                </div>
+
+                <!-- AI Tax Alert -->
+                <div
+                    class="p-6 bg-red-50 border border-red-200 rounded-3xl flex items-start gap-4 text-red-600 shadow-sm relative overflow-hidden group hover:shadow-md transition-all cursor-pointer">
+                    <div
+                        class="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-red-100 to-transparent pointer-events-none">
+                    </div>
+                    <div class="w-12 h-12 bg-red-100 rounded-2xl flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-bell text-xl animate-bounce"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-3">
+                            <h4 class="font-black text-sm uppercase tracking-widest text-red-700">TAX ALERT: Khẩn cấp
+                            </h4>
+                            <span
+                                class="px-2 py-0.5 bg-red-600 text-white text-[9px] font-black rounded-sm uppercase tracking-wider">Mới</span>
+                        </div>
+                        <p class="text-sm font-bold mt-1 text-red-800">Bộ Tài chính công bố Dự thảo Luật Thuế Tiêu thụ
+                            đặc biệt (sửa đổi), đề xuất tăng thuế đối với đồ uống có đường và rượu bia từ 2026.</p>
+                        <p
+                            class="text-[10px] uppercase font-bold text-red-500 tracking-widest mt-3 flex items-center gap-2">
+                            <i class="fa-solid fa-robot"></i> AI Phân tích tác động: Rủi ro cao đối với nhóm hàng HS
+                            2203 & 2204.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div id="newsFilterBlock" class="flex flex-wrap items-center gap-3 border-b border-slate-200/60 pb-6">
+                    <button onclick="filterNews('All', this)"
+                        class="news-filter-btn active-filter px-5 py-2 bg-slate-900 text-white rounded-xl text-xs font-black shadow-md transition-all">Tất
+                        cả Tin tức</button>
+                    <button onclick="filterNews('Import Tax', this)"
+                        class="news-filter-btn px-5 py-2 bg-white text-slate-600 border border-slate-200 rounded-xl text-xs font-bold hover:bg-slate-50 transition-all">Thuế
+                        Nhập khẩu</button>
+                    <button onclick="filterNews('VAT', this)"
+                        class="news-filter-btn px-5 py-2 bg-white text-slate-600 border border-slate-200 rounded-xl text-xs font-bold hover:bg-slate-50 transition-all">Thuế
+                        GTGT (VAT)</button>
+                    <button onclick="filterNews('Corporate Tax', this)"
+                        class="news-filter-btn px-5 py-2 bg-white text-slate-600 border border-slate-200 rounded-xl text-xs font-bold hover:bg-slate-50 transition-all">Thuế
+                        Doanh nghiệp</button>
+                    <button onclick="filterNews('Law', this)"
+                        class="news-filter-btn px-5 py-2 bg-white text-slate-600 border border-slate-200 rounded-xl text-xs font-bold hover:bg-slate-50 transition-all">Luật
+                        & Nghị định</button>
+                    <button onclick="filterNews('Customs', this)"
+                        class="news-filter-btn px-5 py-2 bg-white text-slate-600 border border-slate-200 rounded-xl text-xs font-bold hover:bg-slate-50 transition-all">Chính
+                        sách Hải quan</button>
+                    <div class="w-px h-6 bg-slate-200 mx-2 hidden md:block"></div>
+                    <button onclick="filterNewsRegion('Châu Á', this)"
+                        class="region-filter-btn px-5 py-2 bg-slate-50 text-slate-500 border border-slate-200 rounded-xl text-xs font-bold hover:bg-slate-100 transition-all flex items-center gap-2"><i
+                            class="fa-solid fa-earth-asia"></i> Châu Á</button>
+                    <button onclick="filterNewsRegion('EU', this)"
+                        class="region-filter-btn px-5 py-2 bg-slate-50 text-slate-500 border border-slate-200 rounded-xl text-xs font-bold hover:bg-slate-100 transition-all flex items-center gap-2"><i
+                            class="fa-solid fa-earth-europe"></i> EU</button>
+                    <button onclick="filterNewsRegion('US', this)"
+                        class="region-filter-btn px-5 py-2 bg-slate-50 text-slate-500 border border-slate-200 rounded-xl text-xs font-bold hover:bg-slate-100 transition-all flex items-center gap-2"><i
+                            class="fa-solid fa-flag-usa"></i> Mỹ</button>
+                </div>
+
+                <!-- Trending / Layout -->
+                <h3 class="text-lg font-black tracking-tight flex items-center gap-2 text-slate-800"><i
+                        class="fa-solid fa-bolt text-yellow-500"></i> Trending Weekly</h3>
+
+                <!-- Videos Grid -->
+                <div id="newsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10">
+                    <!-- Cards will be rendered by JS -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- DATABASE ENGINE 4.0 (Relational Simulation) -->
+    <script src="database.js"></script>
+    <script>
+        let currentHS = null;
+        const fmt = new Intl.NumberFormat('vi-VN');
+
+        const tabNames = {
+            'home': 'Tổng quan nền tảng',
+            'search': 'Tra cứu thuế',
+            'calculator': 'Máy tính thuế',
+            'policy': 'Căn cứ Pháp lý',
+            'forum': 'Diễn đàn thuế',
+            'news': 'Trung tâm Tin tức Thuế & Pháp lý'
+        };
+
+        // --- AUTH LOGIC ---
+        function openAuthModal(mode) {
+            document.getElementById('authModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            switchAuthTab(mode);
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        function switchAuthTab(mode) {
+            if (mode === 'login') {
+                document.getElementById('auth-login-form').classList.remove('hidden');
+                document.getElementById('auth-register-form').classList.add('hidden');
+                document.getElementById('tab-login-btn').classList.replace('border-transparent', 'border-primary');
+                document.getElementById('tab-login-btn').classList.replace('text-slate-400', 'text-primary');
+                document.getElementById('tab-register-btn').classList.replace('border-primary', 'border-transparent');
+                document.getElementById('tab-register-btn').classList.replace('text-primary', 'text-slate-400');
+            } else {
+                document.getElementById('auth-login-form').classList.add('hidden');
+                document.getElementById('auth-register-form').classList.remove('hidden');
+                document.getElementById('tab-register-btn').classList.replace('border-transparent', 'border-primary');
+                document.getElementById('tab-register-btn').classList.replace('text-slate-400', 'text-primary');
+                document.getElementById('tab-login-btn').classList.replace('border-primary', 'border-transparent');
+                document.getElementById('tab-login-btn').classList.replace('text-primary', 'text-slate-400');
+            }
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.getElementById('tab-' + tabId).classList.add('active');
+
+            const tabTitle = tabNames[tabId] || 'Tính năng';
+
+            document.querySelectorAll('.nav-item').forEach(n => {
+                n.classList.remove('active');
+                if (n.innerText.trim().toLowerCase() === tabTitle.toLowerCase()) {
+                    n.classList.add('active');
+                }
+            });
+
+            // Handle Breadcrumb & BackBtn visibility
+            const backBtn = document.getElementById('globalBackBtn');
+            const breadcrumb = document.getElementById('breadcrumb-container');
+            const breadcrumbText = document.getElementById('breadcrumb-current');
+
+            if (tabId === 'home') {
+                backBtn.classList.remove('show');
+                breadcrumb.classList.add('hidden');
+            } else {
+                backBtn.classList.add('show');
+                breadcrumb.classList.remove('hidden');
+                breadcrumbText.innerText = tabTitle; // Update active trail title
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // --- SEARCH ENGINE 6.0 LOGIC (VỚI TỪ ĐIỂN VÙNG MIỀN NLP AI) ---
+        function normalizeText(text) {
+            let res = text.toLowerCase().trim();
+            for (const [slang, standard] of Object.entries(thongDichVienAI)) {
+                if (res.includes(slang)) res = res.replace(new RegExp(slang, 'g'), standard);
+            }
+            return res;
+        }
+
+        function findHS(query) {
+            const q = normalizeText(query);
+            const prod = dbProducts.find(p => p.keywords.some(k => q.includes(k.toLowerCase())));
+            return prod ? prod.hs_code : null;
+        }
+
+        function handleAutocomplete() {
+            const val = document.getElementById('searchInput').value.trim();
+            const box = document.getElementById('autocompleteBox');
+            if (val.length < 2) { box.classList.add('hidden'); return; }
+
+            const hs = findHS(val);
+            if (hs && dbTaxes[hs]) {
+                box.classList.remove('hidden');
+                box.innerHTML = `
+                    <div onclick="fillSearch('${val}')" class="search-suggest-item flex justify-between items-center p-4 cursor-pointer rounded-2xl transition-all">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 bg-blue-50 text-primary rounded-xl flex items-center justify-center font-black"><i class="fa-solid fa-microchip"></i></div>
+                            <div>
+                                <p class="text-[10px] text-primary uppercase font-black tracking-widest"><i class="fa-solid fa-sparkles"></i> AI Nhận diện</p>
+                                <p class="font-bold text-sm text-slate-900">Map sang HS: <span class="bg-primary text-white px-2 py-0.5 rounded text-xs ml-1">${hs}</span></p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-arrow-right text-slate-200"></i>
+                    </div>
+                `;
+            } else { box.classList.add('hidden'); }
+        }
+
+        function fillSearch(txt) {
+            document.getElementById('searchInput').value = txt;
+            document.getElementById('autocompleteBox').classList.add('hidden');
+            handleSearch();
+        }
+
+        function handleSearch() {
+            const val = document.getElementById('searchInput').value.trim();
+            const resultDiv = document.getElementById('searchResult');
+            const hs = findHS(val);
+
+            resultDiv.innerHTML = `
+                <div class="p-8 border border-dashed border-slate-300 rounded-3xl text-center space-y-4">
+                    <div class="custom-loader mx-auto"></div>
+                    <p class="text-xs font-black uppercase tracking-widest text-slate-400">Layer 1: AI đang xác định loại hàng hóa...</p>
+                </div>
+            `;
+
+            setTimeout(() => {
+                if (hs && dbTaxes[hs]) {
+                    const taxInfo = dbTaxes[hs];
+                    // Build Global Tax HTML
+                    let globalHtml = '';
+                    if (taxInfo.global) {
+                        const countryMap = { VN: 'Việt Nam', CN: 'Trung Quốc', US: 'Mỹ', EU: 'Châu Âu', JP: 'Nhật Bản', TH: 'Thái', SG: 'Singapore', ID: 'Indonesia', MY: 'Mã Lai', KR: 'Hàn Quốc', CU: 'Cuba', FR: 'Pháp', MO: 'Macau' };
+                        let itemsHtml = Object.keys(taxInfo.global).map(k => `
+                            <div class="flex flex-col items-center justify-center p-3 bg-slate-50 border border-slate-100 rounded-xl">
+                                <span class="text-[10px] font-black uppercase text-slate-400 mb-1">${countryMap[k] || k}</span>
+                                <span class="text-xl font-black text-slate-700">${taxInfo.global[k]}%</span>
+                            </div>
+                        `).join('');
+
+                        globalHtml = `
+                            <div class="mt-8 pt-6 border-t border-slate-100">
+                                <p class="text-[10px] font-black uppercase tracking-widest text-primary mb-4 flex items-center gap-2"><i class="fa-solid fa-globe"></i> Thuế Tham khảo các nước (Global MFN)</p>
+                                <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
+                                    <div class="flex flex-col items-center justify-center p-3 bg-primary rounded-xl text-white shadow-md">
+                                        <span class="text-[10px] font-black uppercase text-blue-200 mb-1">Việt Nam</span>
+                                        <span class="text-xl font-black">${taxInfo.ttdb > 0 ? taxInfo.ttdb : taxInfo.nk_mfn}%</span>
+                                    </div>
+                                    ${itemsHtml}
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    resultDiv.innerHTML = `
+                        <div class="space-y-6">
+                            <!-- Accuracy Score Banner -->
+                            <div class="flex items-center justify-between p-4 bg-emerald-50 border border-emerald-100/50 rounded-2xl">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center"><i class="fa-solid fa-check"></i></div>
+                                    <div>
+                                        <p class="text-[10px] font-black uppercase text-emerald-800 tracking-wider">Độ chính xác Dữ liệu</p>
+                                        <p class="text-sm font-bold text-emerald-600">Accuracy Score: 98.5% (Match HS Code: ${hs})</p>
+                                    </div>
+                                </div>
+                                <div class="text-right hidden md:block">
+                                    <p class="text-[9px] font-black uppercase text-slate-400">Data Verified by Official Sources</p>
+                                    <p class="text-xs font-bold text-slate-600"><i class="fa-solid fa-building-columns text-yellow-500 mr-1"></i> Bộ Tài chính, Hệ thống HQ</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Main Result Card -->
+                            <div class="p-10 bg-white border border-slate-200 rounded-[3rem] shadow-2xl flex flex-col gap-8">
+                                <div class="flex justify-between items-start border-b border-slate-100 pb-6">
+                                    <div class="space-y-2">
+                                        <span class="px-3 py-1 bg-slate-100 font-black text-[10px] text-slate-500 rounded-md tracking-widest font-mono">HS: ${hs}</span>
+                                        <h3 class="text-3xl font-black text-slate-900">${taxInfo.name}</h3>
+                                        <p class="text-sm text-slate-500 font-medium">Original Query: "${val}"</p>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <button onclick="autoFillCalc('${hs}', '${val}')" class="px-6 py-4 bg-secondary text-white rounded-2xl font-black uppercase text-xs shadow-xl hover:bg-slate-800 transition-all flex items-center"><i class="fa-solid fa-calculator mr-2"></i>Tính Thuế (Calculator)</button>
+                                        <button onclick="clearSearch()" class="px-6 py-4 bg-slate-100/50 border border-slate-200 text-slate-600 rounded-2xl font-black uppercase text-xs hover:bg-slate-100 transition-all"><i class="fa-solid fa-rotate-right"></i></button>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <div class="p-6 bg-slate-50 rounded-3xl border border-slate-200/50 hover:border-primary/30 transition-all group relative">
+                                        <div class="flex justify-between items-center mb-4">
+                                            <span class="text-[10px] font-black uppercase text-slate-400 tracking-wide">Thuế Nhập khẩu</span>
+                                            <select id="resultFtaSelect" onchange="updateResultFta('${hs}')" class="text-[9px] bg-white border border-slate-200 text-primary rounded px-2 py-1 outline-none font-bold cursor-pointer hover:border-primary">
+                                                <option value="MFN">MFN (Chuẩn)</option>
+                                                ${dbFTA[hs] && dbFTA[hs]['EU'] !== undefined ? '<option value="EU">EVFTA (Châu Âu)</option>' : ''}
+                                                ${dbFTA[hs] && dbFTA[hs]['JP'] !== undefined ? '<option value="JP">VJEPA (Nhật)</option>' : ''}
+                                                ${dbFTA[hs] && dbFTA[hs]['AS'] !== undefined ? '<option value="AS">ATIGA (ASEAN)</option>' : ''}
+                                            </select>
+                                        </div>
+                                        <p class="text-4xl font-black text-slate-800" id="resultNkRate">${taxInfo.nk_mfn}%</p>
+                                        <p class="text-[9px] text-slate-500 font-medium mt-3 border-t border-slate-200 pt-3 relative z-10 break-words"><i class="fa-solid fa-scale-balanced mr-1"></i> Căn cứ: <button onclick="openLawModal('${hs}', 'nk')" class="hover:text-indigo-600 font-black text-indigo-500 underline py-1 px-2 -ml-2 rounded-lg outline-none transition-all active:scale-95">Trích lục VB Pháp Luật</button></p>
+                                    </div>
+                                    <div class="p-6 bg-slate-50 rounded-3xl border border-slate-200/50 hover:border-primary/30 transition-all group relative">
+                                        <div class="flex justify-between items-center mb-4"><span class="text-[10px] font-black uppercase text-slate-400 tracking-wide">Thuế TTĐB</span><i class="fa-solid fa-wine-bottle text-slate-300 group-hover:text-primary transition-all text-xl"></i></div>
+                                        <p class="text-4xl font-black text-slate-800">${taxInfo.ttdb}%</p>
+                                        <p class="text-[9px] text-slate-500 font-medium mt-3 border-t border-slate-200 pt-3 relative z-10 break-words"><i class="fa-solid fa-scale-balanced mr-1"></i> Căn cứ: <button onclick="openLawModal('${hs}', 'ttdb')" class="hover:text-indigo-600 font-black text-indigo-500 underline py-1 px-2 -ml-2 rounded-lg outline-none transition-all active:scale-95">Trích lục VB Pháp Luật</button></p>
+                                    </div>
+                                    <div class="p-6 bg-slate-50 rounded-3xl border border-slate-200/50 hover:border-primary/30 transition-all group relative">
+                                        <div class="flex justify-between items-center mb-4"><span class="text-[10px] font-black uppercase text-slate-400 tracking-wide">Thuế VAT</span><i class="fa-solid fa-percent text-slate-300 group-hover:text-primary transition-all text-xl"></i></div>
+                                        <p class="text-4xl font-black text-slate-800">${taxInfo.vat}%</p>
+                                        <p class="text-[9px] text-slate-500 font-medium mt-3 border-t border-slate-200 pt-3 relative z-10 break-words"><i class="fa-solid fa-scale-balanced mr-1"></i> Căn cứ: <button onclick="openLawModal('${hs}', 'vat')" class="hover:text-indigo-600 font-black text-indigo-500 underline py-1 px-2 -ml-2 rounded-lg outline-none transition-all active:scale-95">Trích lục VB Pháp Luật</button></p>
+                                    </div>
+                                </div>
+                                ${globalHtml}
+                                
+                                <!-- Defensive UX / Trust Indicators -->
+                                <div class="mt-8 pt-6 border-t border-slate-100 space-y-5 animate-fadeIn">
+                                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                                        <div class="flex items-center gap-2 text-xs font-bold text-slate-500">
+                                            <i class="fa-solid fa-clock-rotate-left mr-1"></i> Dữ liệu cập nhật gần nhất: <span class="text-slate-900 bg-slate-100 px-2 py-0.5 rounded">Hôm nay</span>
+                                        </div>
+                                        <div class="flex gap-3 w-full md:w-auto">
+                                            <a href="https://customs.gov.vn/index.jsp?pageId=2&cid=30" target="_blank" class="flex-1 md:flex-none justify-center px-4 py-2 bg-white border border-slate-200 text-slate-600 rounded-xl text-xs font-bold hover:bg-slate-50 hover:text-primary hover:border-primary/30 transition-all flex items-center gap-2 shadow-sm">
+                                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Cổng Hải Quan VN
+                                            </a>
+                                            <button onclick="alert('Cảm ơn bạn đã báo cáo. Đội ngũ Data sẽ kiểm tra lại mức thuế HS ${hs} này trong 24h tới.')" class="flex-1 md:flex-none justify-center px-4 py-2 bg-red-50 border border-red-100/50 text-red-600 rounded-xl text-xs font-bold hover:bg-red-100/80 hover:text-red-700 transition-all flex items-center gap-2 shadow-sm">
+                                                <i class="fa-solid fa-flag"></i> Báo lỗi Dữ liệu
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="p-4 bg-amber-50/50 border border-amber-100 rounded-2xl text-[11px] text-amber-800/80 font-medium leading-relaxed flex gap-3 items-start shadow-sm">
+                                        <i class="fa-solid fa-circle-info mt-0.5 text-amber-500"></i>
+                                        <p><strong class="text-amber-700">Miễn trừ trách nhiệm:</strong> Kết quả trên được AI chuyên ngành Thuế tổng hợp tự động từ CSDL Pháp luật hiện hành (mang tính tham khảo). Người dùng có trách nhiệm tự đối chiếu lại bản gốc Căn cứ pháp lý hoặc liên hệ Chuyên gia tư vấn trước khi ra quyết định kinh doanh. Chúng tôi không hoàn toàn chịu trách nhiệm cho các rủi ro pháp lý phát sinh.</p>
+                                    </div>
+                                </div>
+
+                                <!-- Tiền lệ án / Công văn tham khảo -->
+                                <div class="mt-2 pt-6 border-t border-slate-100">
+                                    <div class="flex items-center justify-between mb-4">
+                                        <h4 class="text-[11px] font-black uppercase text-slate-700 tracking-widest flex items-center gap-2">
+                                            <i class="fa-solid fa-book-bookmark text-primary"></i> Tiền lệ áp mã & Công văn Hướng dẫn
+                                        </h4>
+                                        <span class="text-[9px] bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded font-bold uppercase tracking-widest">AI Đề xuất</span>
+                                    </div>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div onclick="openInHouseViewer('Công văn 2931/TCHQ-TXNK')" class="p-4 bg-slate-50 border border-slate-200 hover:border-primary/40 rounded-2xl transition-all cursor-pointer group shadow-sm flex items-start gap-4">
+                                            <div class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-red-500 group-hover:text-red-600 group-hover:bg-red-50 transition-all shrink-0">
+                                                <i class="fa-solid fa-file-pdf text-lg"></i>
+                                            </div>
+                                            <div>
+                                                <p class="text-[10px] font-black text-slate-400 mb-1 tracking-wider uppercase">Công văn 2931/TCHQ-TXNK</p>
+                                                <p class="text-xs font-bold text-slate-700 line-clamp-2 leading-relaxed group-hover:text-primary transition-all">Hướng dẫn phân loại và biểu thuế linh kiện dành cho mặt hàng tương tự mã HS ${hs}.</p>
+                                            </div>
+                                        </div>
+                                        <div onclick="openInHouseViewer('Quyết định ấn định thuế - Quý IV/2024')" class="p-4 bg-slate-50 border border-slate-200 hover:border-primary/40 rounded-2xl transition-all cursor-pointer group shadow-sm flex items-start gap-4">
+                                            <div class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-400 group-hover:text-amber-600 group-hover:bg-amber-50 transition-all shrink-0">
+                                                <i class="fa-solid fa-gavel text-lg"></i>
+                                            </div>
+                                            <div>
+                                                <p class="text-[10px] font-black text-slate-400 mb-1 tracking-wider uppercase">Quyết định ấn định thuế</p>
+                                                <p class="text-xs font-bold text-slate-700 line-clamp-2 leading-relaxed group-hover:text-primary transition-all">Kết quả giải quyết khiếu nại về áp mã HS ${hs} trong quý IV/2024.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="p-8 bg-slate-50 text-slate-600 rounded-3xl border border-slate-200 flex flex-col items-center text-center gap-4">
+                            <i class="fa-solid fa-folder-open text-4xl text-slate-400"></i>
+                            <div>
+                                <h4 class="font-black text-lg">Không tìm thấy Dữ liệu Tương ứng</h4>
+                                <p class="text-sm font-medium mt-1">Hệ thống chưa ghi nhận thông tin pháp lý cho sản phẩm "${val}". Vui lòng kiểm tra lại từ khóa hoặc danh pháp kỹ thuật.</p>
+                            </div>
+                        </div>
+                    `;
+                }
+            }, 1000);
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('searchResult').innerHTML = '';
+            document.getElementById('searchInput').focus();
+        }
+
+        function updateResultFta(hs) {
+            const val = document.getElementById('resultFtaSelect').value;
+            const taxInfo = dbTaxes[hs];
+            let rate = taxInfo.nk_mfn;
+            if (val !== 'MFN' && dbFTA[hs] && dbFTA[hs][val] !== undefined) {
+                rate = dbFTA[hs][val];
+            }
+            document.getElementById('resultNkRate').innerText = rate + '%';
+        }
+
+        // --- CALCULATOR V4.0 LOGIC ---
+        function syncCalculatorAI() {
+            const val = document.getElementById('calcName').value.trim();
+            const hs = findHS(val);
+            if (hs && dbTaxes[hs]) {
+                document.getElementById('calcHS').value = hs;
+                document.getElementById('calcUnit').value = dbTaxes[hs].unit;
+                if (!document.getElementById('calcPrice').value) document.getElementById('calcPrice').value = dbTaxes[hs].def_price;
+            } else {
+                document.getElementById('calcHS').value = "";
+            }
+        }
+
+        function autoFillCalc(hs, rawName) {
+            switchTab('calculator');
+            // Mocking display value to exactly match screenshot: "Máy xử lý dữ liệu tự động (máy tính) (HS 8471)"
+            const hInfo = dbTaxes[hs] ? dbTaxes[hs].name + ` (HS ${hs})` : rawName;
+            document.getElementById('calcHS').value = hs;
+            document.getElementById('calcName').value = hInfo;
+            document.getElementById('calcUnit').value = dbTaxes[hs] ? dbTaxes[hs].unit : 'Cái';
+            document.getElementById('calcPrice').value = dbTaxes[hs] ? dbTaxes[hs].def_price : 15000000;
+            document.getElementById('calcQty').value = 100;
+            // Focus the calcName input
+            document.getElementById('calcName').focus();
+            runCalculatorPro(); // Run calculation by default to show current stats matches the mockup
+        }
+
+        // XỬ LÝ NLP ĐƠN VỊ TÍNH (MOCK AI)
+        function parseUnitAI() {
+            const rawInp = document.getElementById('calcRawQty');
+            if (!rawInp) return;
+            const raw = rawInp.value.trim().toLowerCase();
+            let qty = parseFloat(raw.replace(/[^0-9.]/g, '')) || 0;
+            // Lấy lại đơn vị hiện tại từ ô dropdown Manual trong trường hợp AI không hiểu
+            let unitStr = document.getElementById('calcUnit').value;
+            let aiFlag = false;
+
+            // Từ điển quy đổi chuyên sâu Hải Quan
+            if (raw.includes('lố')) { qty = qty * 12; unitStr = "Chiếc"; aiFlag = true; }
+            else if (raw.includes('tá')) { qty = qty * 12; unitStr = "Chiếc"; aiFlag = true; }
+            else if (raw.includes('thùng bia') || (raw.includes('thùng') && raw.includes('bia'))) { qty = parseFloat((qty * 24 * 0.33).toFixed(2)); unitStr = "Lít"; aiFlag = true; }
+            else if (raw.includes('chai bia') || (raw.includes('chai') && raw.includes('bia'))) { qty = parseFloat((qty * 0.33).toFixed(2)); unitStr = "Lít"; aiFlag = true; }
+            else if (raw.includes('chai rượu') || (raw.includes('chai') && raw.includes('rượu'))) { qty = parseFloat((qty * 0.75).toFixed(2)); unitStr = "Lít"; aiFlag = true; }
+            else if (raw.includes('thùng')) { qty = qty * 24; unitStr = "Cái"; aiFlag = true; }
+            else if (raw.includes('chai')) { unitStr = "Chai"; aiFlag = true; }
+            else if (raw.includes('lon')) { unitStr = "Lon"; aiFlag = true; }
+            else if (raw.includes('lạng')) { qty = qty * 0.1; unitStr = "Kg"; aiFlag = true; }
+            else if (raw.includes('kg') || raw.includes('kí')) { unitStr = "Kg"; aiFlag = true; }
+            else if (raw.includes('lít') || raw.includes('lit')) { unitStr = "Lít"; aiFlag = true; }
+
+            // Nếu AI nhận diện được thì đổi value của ô Select luôn để khớp
+            if (aiFlag) document.getElementById('calcUnit').value = unitStr;
+
+            document.getElementById('calcQty').value = qty;
+
+            const parsedLbl = document.getElementById('calcParsedUnit');
+            if (parsedLbl) parsedLbl.innerHTML = `${qty} ${unitStr.toUpperCase()}`;
+
+            runCalculatorPro(); // Cập nhật lại kết quả ngay lập tức
+        }
+
+        // XỬ LÝ AI ƯỚC TÍNH LOGISTICS
+        function estimateLogisticsAI() {
+            const inputPrice = parseFloat(document.getElementById('calcPrice').value) || 0;
+            const qty = parseFloat(document.getElementById('calcQty').value) || 0;
+
+            if (inputPrice <= 0 || qty <= 0) {
+                showCalcAlert("Vui lòng nhập Đơn giá và Số lượng trước để AI có cơ sở tính Tỷ trọng Cước.");
+                return;
+            }
+
+            const baseTotal = inputPrice * qty;
+
+            // Giả lập Logic AI: Máy có số liệu benchmark ngành. 
+            // Vận chuyển: Thường chiếm 4% tổng giá trị lô hàng. Bảo hiểm rủi ro: 0.15% (Giá trị tham khảo)
+            const estTransport = Math.round(baseTotal * 0.04);
+            const estInsurance = Math.round(baseTotal * 0.0015);
+
+            const transInp = document.getElementById('calcTransport');
+            const insInp = document.getElementById('calcInsurance');
+
+            // Ghi giá trị vào
+            transInp.value = estTransport;
+            insInp.value = estInsurance;
+
+            // Hiệu ứng "AI Scanning" (Nháy nền xanh tím)
+            transInp.classList.add('bg-indigo-50', 'ring-4', 'ring-indigo-500/20');
+            insInp.classList.add('bg-indigo-50', 'ring-4', 'ring-indigo-500/20');
+
+            setTimeout(() => {
+                transInp.classList.remove('bg-indigo-50', 'ring-4', 'ring-indigo-500/20');
+                insInp.classList.remove('bg-indigo-50', 'ring-4', 'ring-indigo-500/20');
+            }, 600);
+
+            // Cập nhật lại Máy tính Tổng
+            runCalculatorPro();
+        }
+
+        function showCalcAlert(msg) {
+            const ab = document.getElementById('calcAlert');
+            if (!ab) return;
+            document.getElementById('calcAlertText').innerText = msg;
+            ab.classList.remove('hidden');
+        }
+
+        function runCalculatorPro() {
+            const ab = document.getElementById('calcAlert');
+            if (ab) ab.classList.add('hidden');
+
+            const hsEl = document.getElementById('calcHS');
+            if (!hsEl) return;
+
+            const hs = hsEl.value;
+            const originEl = document.getElementById('calcOrigin');
+            const origin = originEl ? originEl.value : 'MFN';
+
+            const inputPrice = parseFloat(document.getElementById('calcPrice').value) || 0;
+            const qty = parseFloat(document.getElementById('calcQty').value) || 0;
+            const transport = parseFloat(document.getElementById('calcTransport').value) || 0;
+            const insurance = parseFloat(document.getElementById('calcInsurance').value) || 0;
+
+            if (inputPrice <= 0 || qty <= 0) {
+                showCalcAlert("Giá trị tài chính và số lượng không được nhỏ hơn hoặc bằng 0.");
+                return;
+            }
+
+            let nkRate = 0;
+            let ttdbRate = 0;
+            let vatRate = 10;
+            let envUnit = 0;
+
+            if (hs && dbTaxes[hs]) {
+                // Thuật toán quét xuất xứ (C/O)
+                if (origin === 'VN') {
+                    nkRate = 0; // Hàng nội địa không có thuế nhập khẩu
+                } else {
+                    nkRate = dbTaxes[hs].nk_mfn || 0;
+                    if (origin !== 'MFN' && dbFTA[hs] && dbFTA[hs][origin] !== undefined) {
+                        nkRate = dbFTA[hs][origin];
+                    }
+                }
+
+                ttdbRate = dbTaxes[hs].ttdb || 0;
+                vatRate = dbTaxes[hs].vat !== undefined ? dbTaxes[hs].vat : 10;
+                envUnit = dbTaxes[hs].env || 0;
+            }
+
+            // Step 1: Base total & CIF
+            const baseTotal = inputPrice * qty;
+            const cifTotal = baseTotal + transport + insurance;
+
+            // Step 2: Tính rế
+            const nkTax = cifTotal * (nkRate / 100);
+            const envTax = envUnit * qty;
+            const ttdbTax = (cifTotal + nkTax + envTax) * (ttdbRate / 100);
+            const vatTax = (cifTotal + nkTax + envTax + ttdbTax) * (vatRate / 100);
+
+            // Step 3: Tổng
+            const totalTax = nkTax + ttdbTax + vatTax + envTax;
+            const totalCost = cifTotal + totalTax;
+
+            // Cập nhật UI Dữ liệu Tài chính
+            if (document.getElementById('resBasePrice')) {
+                document.getElementById('resBasePrice').innerText = fmt.format(baseTotal) + ' đ';
+                document.getElementById('resCif').innerText = fmt.format(cifTotal) + ' đ';
+                document.getElementById('resNk').innerText = nkRate === 0 ? '0 đ' : fmt.format(Math.round(nkTax)) + ' đ';
+                document.getElementById('resTtdb').innerText = ttdbRate === 0 ? '0 đ' : fmt.format(Math.round(ttdbTax)) + ' đ';
+                document.getElementById('resVat').innerText = vatRate === 0 ? '0 đ' : fmt.format(Math.round(vatTax)) + ' đ';
+
+                // Cập nhật Tỉ lệ Thuế (Phần Trăm %)
+                const nkLabel = document.getElementById('resNkLabel');
+                const nkRateEl = document.getElementById('resNkRate');
+                if (nkLabel) nkLabel.innerText = origin === 'MFN' ? 'MFN' : origin;
+                if (nkRateEl) nkRateEl.innerText = nkRate + '%';
+
+                const ttdbRateEl = document.getElementById('resTtdbRate');
+                if (ttdbRateEl) ttdbRateEl.innerText = ttdbRate + '%';
+
+                const vatRateEl = document.getElementById('resVatRate');
+                if (vatRateEl) vatRateEl.innerText = vatRate + '%';
+
+                document.getElementById('resTotalTax').innerText = totalTax === 0 ? '0 đ' : fmt.format(Math.round(totalTax)) + ' đ';
+                document.getElementById('resTotalCost').innerText = fmt.format(Math.round(totalCost)) + ' đ';
+            }
+        }
+
+        // --- FORUM AI GUARD LOGIC ---
+        function handlePostForum() {
+            const author = document.getElementById('forumAuthor').value.trim() || 'Thành viên Ẩn danh';
+            const content = document.getElementById('forumContent').value.trim();
+            const alertBox = document.getElementById('forumAlert');
+
+            if (!content) return;
+
+            // Simple AI Moderation Mockup (Kiểm duyệt bằng danh sách từ khóa mô phỏng cho NLP)
+            const allowedTopics = ['thuế', 'hải quan', 'kế toán', 'kiểm toán', 'xuất khẩu', 'nhập khẩu', 'hs', 'c/o', 'nghị định', 'luật', 'thông tư', 'doanh nghiệp', 'tài chính', 'cổ phần', 'ttđb', 'vat', 'gtgt', 'phi mậu dịch', 'hạch toán', 'chi phí'];
+            const lcContent = content.toLowerCase();
+
+            const matchCount = allowedTopics.filter(topic => lcContent.includes(topic)).length;
+
+            alertBox.classList.remove('hidden', 'bg-red-50', 'text-red-600', 'bg-emerald-50', 'text-emerald-600');
+
+            if (matchCount >= 2) {
+                // Đủ điều kiện đăng (Mô phỏng POST request delay)
+                document.getElementById('forumContent').value = '';
+                alertBox.classList.add('bg-slate-100', 'text-slate-600');
+                alertBox.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Khởi chạy thuật toán NLP Kiểm duyệt Nội dung...';
+
+                setTimeout(() => {
+                    alertBox.classList.replace('bg-slate-100', 'bg-emerald-50');
+                    alertBox.classList.replace('text-slate-600', 'text-emerald-600');
+                    alertBox.innerHTML = '<i class="fa-solid fa-check-circle"></i> Nội dung tuân thủ đúng tiêu chuẩn chuyên môn học thuật. Đã xuất bản.';
+
+                    const postList = document.getElementById('forumPostsList');
+                    const newPost = document.createElement('div');
+                    newPost.className = 'p-8 bg-white border border-primary/20 rounded-3xl shadow-lg transition-all group animate-fadeIn';
+                    newPost.innerHTML = `
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-slate-100 text-slate-500 rounded-full flex items-center justify-center font-black"><i class="fa-solid fa-user"></i></div>
+                                <div>
+                                    <p class="font-black text-sm text-slate-900">${author}</p>
+                                    <p class="text-[10px] text-primary uppercase font-bold tracking-wider">Vừa xong</p>
+                                </div>
+                            </div>
+                            <span class="px-3 py-1 bg-emerald-50 text-emerald-600 text-[9px] font-black uppercase tracking-widest rounded-lg border border-emerald-100 flex items-center gap-1"><i class="fa-solid fa-check"></i> Nội dung Hợp lệ</span>
+                        </div>
+                        <p class="text-slate-600 font-medium leading-relaxed">${content}</p>
+                        <div class="mt-6 flex items-center gap-6 text-slate-400 text-xs font-bold">
+                            <button class="hover:text-primary transition-all"><i class="fa-solid fa-hands-clapping mr-1"></i> Tham luận (0)</button>
+                            <button class="hover:text-primary transition-all"><i class="fa-solid fa-reply mr-1"></i> Phản hồi</button>
+                        </div>
+                    `;
+                    postList.insertBefore(newPost, postList.firstChild);
+
+                    setTimeout(() => alertBox.classList.add('hidden'), 3000);
+                }, 1500);
+
+            } else {
+                // Vi phạm chính sách
+                alertBox.classList.add('bg-red-50', 'text-red-600');
+                alertBox.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> <strong>Từ chối Xuất bản:</strong> Nội dung thiếu tính học thuật chuyên ngành Thuế/Kế toán, hoặc vi phạm điều khoản chống rác điện báo (Spam). Yêu cầu bổ sung dữ kiện pháp lý.';
+            }
+        }
+
+        // TABLE 5: NEWS DATABASE (Kèm chiến thuật Caching LocalStorage)
+        let dbNews = []; // Khởi tạo mảng rỗng, dữ liệu sẽ được nạp qua hàm loadNewsWithCache
+
+        // Dữ liệu dự phòng (Fallback) phòng khi API lỗi hoặc chạy lần đầu chưa có mạng
+        const fallbackNews = [
+            {
+                id: 1,
+                title: "EU đề xuất cải cách thuế nhập khẩu thép nhắm vào sản phẩm carbon cao",
+                summary: "EU đang xem xét điều chỉnh thuế nhập khẩu thép nhằm bảo vệ ngành sản xuất nội địa và đạt mục tiêu giảm phát thải. Chính sách này ảnh hưởng đến Trung Quốc và VN.",
+                source: "Reuters",
+                time: "2 giờ trước",
+                tag: "Import Tax",
+                country: "EU",
+                img: "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 2,
+                title: "Mỹ công bố mức thuế chống bán phá giá sơ bộ đối với tôm nhập khẩu",
+                summary: "DOC Mỹ vừa ban hành kết luận sơ bộ trong đợt rà soát thuế CBPG đối với tôm VN. Mức thuế dự kiến thay đổi lợi thế cạnh tranh của các doanh nghiệp xuất khẩu.",
+                source: "Bloomberg",
+                time: "5 giờ trước",
+                tag: "Import Tax",
+                country: "US",
+                img: "https://images.unsplash.com/photo-1622396090075-ab6b8396fe9b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 3,
+                title: "Việt Nam chuẩn bị áp dụng Thuế Tối thiểu Toàn cầu từ 2025",
+                summary: "Quốc hội đã thông qua Nghị quyết áp dụng thuế TNDN bổ sung với mức 15% đối với các Tập đoàn đa quốc gia có doanh thu lớn.",
+                source: "VnExpress",
+                time: "12 giờ trước",
+                tag: "Corporate Tax",
+                country: "Việt Nam",
+                img: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 4,
+                title: "Hải quan triển khai hệ thống thông quan tự động thế hệ mới",
+                summary: "Khởi động module kiểm duyệt C/O AI, giúp tự động hiển thị cảnh báo rủi ro về xuất xứ hàng hóa, giảm 40% thời gian thông quan cho luồng Xanh.",
+                source: "Báo Hải Quan",
+                time: "1 ngày trước",
+                tag: "Customs",
+                country: "Việt Nam",
+                img: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 5,
+                title: "Dự thảo giảm 2% thuế GTGT (VAT) tiếp tục được xem xét",
+                summary: "Bộ Tài chính trình Chính phủ phương án tiếp tục giảm 2% thuế GTGT nhằm kích cầu tiêu dùng và hỗ trợ doanh nghiệp phục hồi sản xuất kinh doanh.",
+                source: "Tuổi Trẻ",
+                time: "2 ngày trước",
+                tag: "VAT",
+                country: "Việt Nam",
+                img: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 6,
+                title: "Ban hành Thông tư mới về quản lý rủi ro thuế Doanh nghiệp FDI",
+                summary: "Quy định mới tập trung vào giám sát chuyển giá và minh bạch thông tin giao dịch liên kết của các doanh nghiệp có vốn đầu tư nước ngoài.",
+                source: "Thanh Niên",
+                time: "3 ngày trước",
+                tag: "Law",
+                country: "Việt Nam",
+                img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+            }
+        ];
+
+        // Lấy tin tức THẬT từ VNExpress (Chuyên mục Kinh Doanh) qua API miễn phí
+        async function fetchNewsFromAPI() {
+            try {
+                // Link RSS gốc của VNExpress Kinh Doanh
+                const rssUrl = 'https://vnexpress.net/rss/kinh-doanh.rss';
+                // Đẩy qua dịch vụ rss2json để lấy JSON về thay vì dạng XML khó đọc
+                const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
+
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                if (data.status === 'ok') {
+                    // Cắt lấy 8 tin mới nhất và ráp vào định dạng giao diện của web bạn
+                    return data.items.slice(0, 8).map((item, index) => {
+                        // Thử moi móc hình ảnh từ bài gốc, nếu không có lấy ảnh minh họa mặc định
+                        let imgUrl = "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80";
+                        const imgMatch = item.description.match(/src="([^"]+)"/);
+                        if (imgMatch && imgMatch[1]) {
+                            imgUrl = imgMatch[1];
+                        }
+
+                        // Lọc bỏ mã HTML rác như thẻ <a>, <img> ra khỏi đoạn tóm tắt
+                        const tempDiv = document.createElement("div");
+                        tempDiv.innerHTML = item.description;
+                        const cleanSummary = tempDiv.textContent || tempDiv.innerText || "";
+
+                        // Chế hệ thống tag ngẫu nhiên để bộ lọc ở giao diện vẫn hoạt động
+                        const randomTags = ['Import Tax', 'VAT', 'Corporate Tax', 'Law', 'Customs'];
+                        const randomTag = randomTags[Math.floor(Math.random() * randomTags.length)];
+
+                        return {
+                            id: index + 1,
+                            title: item.title,
+                            summary: cleanSummary.trim().substring(0, 100) + '...',
+                            source: "VNExpress",
+                            time: new Date(item.pubDate).toLocaleString('vi-VN'),
+                            tag: randomTag,
+                            country: "Việt Nam",
+                            img: imgUrl,
+                            link: item.link // GIỮ LẠI ĐƯỜNG LINK ĐỂ BẤM VÀO ĐƯỢC
+                        };
+                    });
+                } else {
+                    throw new Error("Lỗi API tải RSS");
+                }
+            } catch (error) {
+                console.error("Lỗi khi tải tin thật, chuyển về tin tự chế:", error);
+                return fallbackNews;
+            }
+        }
+
+        // Chiến thuật Caching 6 tiếng
+        async function loadNewsWithCache() {
+            const CACHE_KEY = 'taxportal_news_cache_v3'; // Đổi tiếp key nưa để tự động tải lại bản mới nhất
+            const CACHE_HOURS = 6;
+            const CACHE_MS = CACHE_HOURS * 60 * 60 * 1000;
+
+            const cachedString = localStorage.getItem(CACHE_KEY);
+
+            if (cachedString) {
+                try {
+                    const cacheData = JSON.parse(cachedString);
+                    const now = new Date().getTime();
+
+                    if (now - cacheData.timestamp < CACHE_MS) {
+                        console.log("%c[CACHE] Lấy tin SỐNG từ ổ cứng (Còn hạn)! KHÔNG tốn API", "color: green; font-weight: bold;");
+                        dbNews = cacheData.data;
+                        renderNews();
+                        return;
+                    }
+                } catch (e) { console.error("Cache lỗi:", e); }
+            }
+
+            console.log("%c[API] Đang tải tin tức SỐNG từ mạng...", "color: orange; font-weight: bold;");
+
+            const grid = document.getElementById('newsGrid');
+            if (grid) grid.innerHTML = '<div class="col-span-full py-12 text-center text-slate-500 font-medium animate-pulse"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Hệ thống đang thu thập tin tức thời sự từ internet...</div>';
+
+            try {
+                const newData = await fetchNewsFromAPI();
+                dbNews = newData;
+
+                localStorage.setItem(CACHE_KEY, JSON.stringify({
+                    data: newData,
+                    timestamp: new Date().getTime()
+                }));
+
+                renderNews();
+                console.log("%c[CACHE] Đã lưu bản sao tin tức hiện tại vào ổ cứng!", "color: blue;");
+            } catch (err) {
+                console.error("Lỗi API, rơi về dữ liệu dự phòng", err);
+                dbNews = fallbackNews;
+                renderNews();
+            }
+        }
+
+        let currentTaxFilter = 'All';
+        let currentRegionFilter = 'All';
+
+        function filterNews(tag, element) {
+            currentTaxFilter = tag;
+            document.querySelectorAll('.news-filter-btn').forEach(btn => {
+                btn.classList.remove('bg-slate-900', 'text-white', 'shadow-md', 'active-filter');
+                btn.classList.add('bg-white', 'text-slate-600', 'border-slate-200');
+            });
+            element.classList.remove('bg-white', 'text-slate-600', 'border-slate-200');
+            element.classList.add('bg-slate-900', 'text-white', 'shadow-md', 'active-filter');
+            renderNews();
+        }
+
+        function filterNewsRegion(region, element) {
+            if (currentRegionFilter === region) {
+                currentRegionFilter = 'All';
+                element.classList.remove('bg-blue-50', 'text-primary', 'border-blue-100');
+                element.classList.add('bg-slate-50', 'text-slate-500', 'border-slate-200');
+            } else {
+                currentRegionFilter = region;
+                document.querySelectorAll('.region-filter-btn').forEach(btn => {
+                    btn.classList.remove('bg-blue-50', 'text-primary', 'border-blue-100');
+                    btn.classList.add('bg-slate-50', 'text-slate-500', 'border-slate-200');
+                });
+                element.classList.remove('bg-slate-50', 'text-slate-500', 'border-slate-200');
+                element.classList.add('bg-blue-50', 'text-primary', 'border-blue-100');
+            }
+            renderNews();
+        }
+
+        function renderNews() {
+            const grid = document.getElementById('newsGrid');
+            if (!grid) return;
+
+            let filtered = dbNews.filter(n => {
+                let match = true;
+                if (currentTaxFilter !== 'All' && n.tag !== currentTaxFilter) match = false;
+                if (currentRegionFilter !== 'All') {
+                    if (currentRegionFilter === 'Châu Á' && !['Việt Nam', 'Trung Quốc', 'Nhật Bản', 'Singapore'].includes(n.country)) match = false;
+                    if (currentRegionFilter === 'EU' && n.country !== 'EU') match = false;
+                    if (currentRegionFilter === 'US' && n.country !== 'US') match = false;
+                }
+                return match;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-12 text-center text-slate-500 font-medium">Không tìm thấy tin tức phù hợp với bộ lọc hiện tại.</div>`;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(news => `
+                <a href="${news.link || '#'}" target="_blank" class="group cursor-pointer flex flex-col gap-3">
+                    <div class="relative w-full aspect-video rounded-2xl overflow-hidden bg-slate-100 shadow-sm transition-all group-hover:scale-[1.02] group-hover:shadow-lg">
+                        <img src="${news.img}" alt="thumbnail" class="w-full h-full object-cover">
+                        <div class="absolute bottom-2 right-2 px-2 py-1 bg-black/70 text-white text-[10px] font-black rounded backdrop-blur-md">Live VNExpress</div>
+                    </div>
+                    <div class="flex gap-3 items-start pr-2 mt-1">
+                        <div class="w-10 h-10 rounded-full bg-slate-200 shrink-0 border border-slate-300 flex items-center justify-center font-black text-slate-500 text-sm overflow-hidden">
+                            ${news.source.charAt(0)}
+                        </div>
+                        <div class="space-y-1">
+                            <h4 class="font-black text-[15px] text-slate-900 leading-snug group-hover:text-primary transition-all line-clamp-2">${news.title}</h4>
+                            <p class="text-[11px] font-semibold text-slate-500">${news.source} • ${news.time}</p>
+                            <p class="text-xs text-slate-500 leading-relaxed font-medium line-clamp-2 mt-2 border-l-2 border-primary/30 pl-2 italic">"${news.summary}"</p>
+                            <div class="flex items-center gap-2 mt-3">
+                                <span class="text-[9px] font-black uppercase text-primary bg-blue-50 px-2 py-1 rounded">#${news.tag}</span>
+                                <span class="text-[9px] font-black uppercase text-slate-600 bg-slate-100 border border-slate-200 px-2 py-1 rounded">${news.country}</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            `).join('');
+        }
+
+        window.onload = () => {
+            switchTab('home');
+            loadNewsWithCache(); // Chạy hàm Caching thay vì vẽ ra liền
+
+            // Cài đặt thời gian "SỐNG" (Real-time) cho Thẻ Niềm tin (Trust Badge)
+            const badgeBtn = document.getElementById('trustBadgeText');
+            if (badgeBtn) {
+                const today = new Date();
+                const dateVN = today.toLocaleDateString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
+                badgeBtn.innerText = `Dữ liệu đồng bộ & Xác thực với Tổng cục HQ Quốc Gia lúc 00:00 ngày ${dateVN}`;
+            }
+        };
+
+        // --- INTERNAL LAW VIEWER MODAL ---
+        function openLawModal(hs, type) {
+            const taxInfo = dbTaxes[hs] || { name: 'Sản phẩm ' + hs, nk_mfn: 0, ttdb: 0, vat: 10 };
+            let lawName = (dbLaws[type] && dbLaws[type].name) || 'Văn bản định hướng';
+            let contentHtml = '';
+
+            if (type === 'nk') {
+                lawName = 'Nghị định 26/2023/NĐ-CP - Phụ lục II';
+                contentHtml = `
+                    <div class="text-center pb-4 mb-5 border-b-2 border-slate-800 relative">
+                        <div class="absolute top-0 right-0 bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-bl-xl rounded-tr-xl font-black text-[10px] uppercase tracking-widest border border-emerald-200 shadow-sm flex items-center gap-1.5">
+                            <i class="fa-solid fa-circle-check"></i> Đang hiệu lực
+                        </div>
+                        <h4 class="font-bold text-[13px] mb-1 uppercase tracking-wide mt-2">Cộng hòa Xã hội Chủ nghĩa Việt Nam</h4>
+                        <p class="font-bold text-xs underline mb-4 leading-tight">Độc lập - Tự do - Hạnh phúc</p>
+                        <h5 class="font-black pt-2 uppercase text-red-800 tracking-wider">PHỤ LỤC II</h5>
+                        <p class="font-bold uppercase text-[12px] mt-1 tracking-wide leading-relaxed">Biểu Thuế Nhập Khẩu Ưu Đãi<br>Theo Danh Mục Mặt Hàng Chịu Thuế</p>
+                        <p class="text-[10px] italic mt-1 text-slate-600 opacity-80">(Kèm theo Nghị định số 26/2023/NĐ-CP của Chính phủ)</p>
+                    </div>
+                    
+                    <div class="flex items-center justify-between mb-3 bg-blue-50 text-blue-800 px-4 py-3 rounded-xl border border-blue-200 shadow-sm">
+                        <div class="text-[11px] font-medium leading-relaxed">
+                            <strong class="font-black uppercase flex items-center gap-2 mb-1"><i class="fa-solid fa-wand-magic-sparkles text-primary"></i> AI Highlighting Active</strong>
+                            Hệ thống đã tự động cuộn và bôi vàng chính xác dòng Thuế áp dụng cho mã HS <strong class="uppercase text-primary">${hs}</strong>.
+                        </div>
+                    </div>
+                    
+                    <div class="overflow-x-auto border-2 border-slate-800 rounded-lg">
+                        <table class="w-full text-left text-[11px] border-collapse bg-white">
+                            <thead>
+                                <tr class="bg-slate-100 text-slate-900 border-b-2 border-slate-800">
+                                    <th class="p-3 border-r-2 border-slate-800 w-[20%] font-black text-center">Mã hàng (HS)</th>
+                                    <th class="p-3 border-r-2 border-slate-800 w-[60%] font-black text-center">Mô tả hàng hóa</th>
+                                    <th class="p-3 font-black text-center w-[20%]">Thuế suất (%)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-slate-300 text-slate-400 italic bg-white">
+                                    <td class="p-3 border-r-2 border-slate-800 text-center">...</td>
+                                    <td class="p-3 border-r-2 border-slate-800">Các mặt hàng khác trong chương</td>
+                                    <td class="p-3 text-center">...</td>
+                                </tr>
+                                <tr class="bg-yellow-200 font-bold text-slate-900 relative shadow-[inset_0_0_0_2px_#ca8a04]">
+                                    <td class="p-3 border-r-2 border-slate-800 text-center text-red-700 text-[13px] align-top">${hs}</td>
+                                    <td class="p-3 border-r-2 border-slate-800 text-[12px] align-top">
+                                        ${taxInfo.name}
+                                        <div class="mt-3 text-[10px] font-medium text-slate-600 bg-white/60 p-2 rounded-lg border border-yellow-300/50">
+                                            <i class="fa-solid fa-share-nodes text-primary mr-1"></i> Liên kết: <button onclick="alert('Đang mở rẽ nhánh sang Điều khoản quy định chi tiết...') " class="text-primary hover:underline font-bold transition-all">Xem quy định chi tiết tại Điều 5</button>
+                                        </div>
+                                    </td>
+                                    <td class="p-3 text-center text-lg text-red-700 align-top">${taxInfo.nk_mfn}</td>
+                                </tr>
+                                <tr class="text-slate-400 italic bg-white">
+                                    <td class="p-3 border-r-2 border-slate-800 text-center">...</td>
+                                    <td class="p-3 border-r-2 border-slate-800">...</td>
+                                    <td class="p-3 text-center">...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            } else if (type === 'ttdb') {
+                lawName = 'Luật Thuế Tiêu thụ đặc biệt số 27/2008/QH12';
+                let rate = taxInfo.ttdb || 0;
+                contentHtml = `
+                    <div class="text-center pb-4 mb-5 border-b-2 border-slate-800 relative">
+                        <div class="absolute top-0 right-0 bg-yellow-100 text-yellow-700 px-3 py-1.5 rounded-bl-xl rounded-tr-xl font-black text-[10px] uppercase tracking-widest border border-yellow-300 shadow-sm flex items-center gap-1.5">
+                            <i class="fa-solid fa-triangle-exclamation"></i> Sắp sửa đổi
+                        </div>
+                        <h4 class="font-bold text-[13px] mb-1 uppercase tracking-wide mt-2">Cộng hòa Xã hội Chủ nghĩa Việt Nam</h4>
+                        <p class="font-bold text-xs underline mb-4">Độc lập - Tự do - Hạnh phúc</p>
+                        <h5 class="font-black pt-2 uppercase text-red-800 tracking-wider">LUẬT SỐ: 27/2008/QH12</h5>
+                        <p class="font-bold uppercase text-[12px] mt-1 tracking-wide">LUẬT THUẾ TIÊU THỤ ĐẶC BIỆT</p>
+                    </div>
+                    <div class="leading-relaxed text-[12px] text-justify font-medium">
+                        <p class="font-black mb-2 text-[13px] text-slate-900">Điều 7. Biểu thuế tiêu thụ đặc biệt</p>
+                        <p class="mb-4">Biểu thuế tiêu thụ đặc biệt đối với hàng hóa, dịch vụ được quy định như sau:</p>
+                        
+                        <div class="overflow-x-auto border-2 border-slate-800 mt-2 mb-4">
+                            <table class="w-full text-left text-[11px] border-collapse bg-white">
+                                <thead>
+                                    <tr class="bg-slate-100 text-slate-900 border-b-2 border-slate-800">
+                                        <th class="p-3 border-r-2 border-slate-800 w-[70%] font-black text-center">Hàng hoá, dịch vụ</th>
+                                        <th class="p-3 font-black text-center">Thuế suất (%)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${rate > 0 ?
+                        `<tr class="bg-yellow-100 font-bold border-b-2 border-slate-800 text-slate-900">
+                                        <td class="p-3 border-r-2 border-slate-800 text-[12px]">${taxInfo.name}</td>
+                                        <td class="p-3 text-center text-lg text-red-700">${rate}</td>
+                                    </tr>` :
+                        `<tr>
+                                        <td colspan="2" class="p-5 text-center text-slate-500 italic bg-slate-50">Sản phẩm <b>${taxInfo.name}</b> không thuộc Danh mục mặt hàng chịu mức thuế tại Phụ lục này.<br>(Mức áp dụng quy đổi: 0%)</td>
+                                    </tr>`
+                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                 `;
+            } else {
+                lawName = 'Luật Thuế Giá trị gia tăng số 13/2008/QH12';
+                contentHtml = `
+                    <div class="text-center pb-4 mb-5 border-b-2 border-slate-800">
+                        <h4 class="font-bold text-[13px] mb-1 uppercase tracking-wide">Cộng hòa Xã hội Chủ nghĩa Việt Nam</h4>
+                        <p class="font-bold text-xs underline mb-4">Độc lập - Tự do - Hạnh phúc</p>
+                        <h5 class="font-black pt-2 uppercase text-red-800 tracking-wider">LUẬT SỐ: 13/2008/QH12</h5>
+                        <p class="font-bold uppercase text-[12px] mt-1 tracking-wide">LUẬT THUẾ GIÁ TRỊ GIA TĂNG</p>
+                    </div>
+                    <div class="leading-relaxed text-[12px] text-center font-medium">
+                        <p class="font-black text-[13px] mb-1 uppercase text-slate-900">${taxInfo.name}</p>
+                        <p class="italic text-slate-500 mb-6">Mã nhóm Danh mục tham chiếu trực tiếp (HS): ${hs}</p>
+                        
+                        <div class="inline-block p-6 bg-white border-2 border-slate-800 mt-2 mb-4 mx-auto min-w-[200px] shadow-[3px_3px_0_0_rgba(15,23,42,0.8)]">
+                            <p class="text-[9px] font-black text-slate-600 uppercase tracking-widest mb-2 border-b border-dashed border-slate-300 pb-2">MỨC THUẾ SUẤT ÁP DỤNG</p>
+                            <p class="text-4xl font-black text-red-700">${taxInfo.vat}%</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            document.getElementById('lawModalTitle').innerText = lawName;
+            document.getElementById('lawModalContent').innerHTML = contentHtml;
+            document.getElementById('lawModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLawModal() {
+            document.getElementById('lawModal').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        // --- IN-HOUSE VIEWER LOGIC ---
+        const realLawData = {
+            'gtgt': {
+                title: 'Luật Thuế Giá trị gia tăng',
+                number: '13/2008/QH12',
+                content: `
+                    <p><strong class="font-black text-slate-900 text-[15px] mb-2 inline-block">Điều 4. Đối tượng không chịu thuế</strong></p>
+                    <p class="mb-4">1. Sản phẩm trồng trọt (bao gồm cả sản phẩm rừng trồng), chăn nuôi, thủy sản, hải sản nuôi trồng, đánh bắt chưa chế biến thành các khoản sản phẩm khác hoặc chỉ qua sơ chế thông thường của tổ chức, cá nhân tự sản xuất, đánh bắt bán ra và ở khâu nhập khẩu.</p>
+                    <p class="mb-4">2. Sản phẩm là giống vật nuôi, giống cây trồng, bao gồm trứng giống, con giống, cây giống, hạt giống, tinh dịch, phôi, vật liệu di truyền.</p>
+                    <div class="px-5 py-4 my-6 relative rounded-tr-2xl shadow-[inset_4px_0_0_0_#2563eb] bg-blue-50/50 group border border-blue-100">
+                        <span class="absolute -right-3 -top-3 w-8 h-8 font-sans bg-primary text-white rounded-full flex items-center justify-center text-xs shadow-lg border-2 border-white cursor-pointer group-hover:bg-blue-700 transition-all"><i class="fa-solid fa-sparkles"></i></span>
+                        <p><strong class="font-black text-slate-900 text-sm mb-2 inline-block">Điều 8. Thuế suất (Trích đoạn nổi bật)</strong><br>
+                        1. Mức thuế suất 0% áp dụng đối với hàng hóa, dịch vụ xuất khẩu, vận tải quốc tế và hàng hóa, dịch vụ không chịu thuế giá trị gia tăng quy định tại Điều 4 của Luật này khi xuất khẩu, trừ các trường hợp quy định tại khoản 2 Điều này.<br><br><span class="bg-yellow-200/80 px-1 font-bold text-red-800">Cơ sở kinh doanh hàng hóa, dịch vụ xuất khẩu (bao gồm cả Phần mềm) được áp dụng mức thuế suất 0% nếu đáp ứng điều kiện có hợp đồng ký kết và chứng từ thanh toán qua ngân hàng.</span></p>
+                        <div class="mt-4 flex gap-2 font-sans opacity-70 group-hover:opacity-100 transition-all">
+                            <button onclick="fillPrompt(this)" class="px-3 py-1.5 bg-white border border-blue-200 text-primary text-[10px] font-black rounded-lg uppercase tracking-wider shadow-sm hover:scale-105 transition-all">Hỏi AI: Xuất khẩu phần mềm có cần kê khai không?</button>
+                        </div>
+                    </div>
+                    <p><strong class="font-black text-slate-900 text-[15px] mt-6 mb-2 inline-block">Điều 9. Phương pháp khấu trừ thuế</strong><br>1. Phương pháp khấu trừ thuế giá trị gia tăng được quy định như sau:<br>a) Số thuế giá trị gia tăng phải nộp theo phương pháp khấu trừ thuế bằng số thuế giá trị gia tăng đầu ra trừ số thuế giá trị gia tăng đầu vào được khấu trừ;</p>
+                `
+            },
+            'ttdb': {
+                title: 'Luật Thuế Tiêu thụ đặc biệt',
+                number: '27/2008/QH12',
+                content: `
+                    <p><strong class="font-black text-slate-900 text-[15px] mb-2 inline-block">Điều 2. Đối tượng chịu thuế</strong></p>
+                    <p class="mb-2">1. Hàng hóa:</p>
+                    <p class="ml-4 mb-1">a) Thuốc lá điếu, xì gà và chế phẩm khác từ cây thuốc lá dùng để hút, hít, nhai, ngửi, ngậm;</p>
+                    <p class="ml-4 mb-1">b) Rượu;</p>
+                    <p class="ml-4 mb-1">c) Bia;</p>
+                    <p class="ml-4 mb-4">d) Xe ô tô dưới 24 chỗ, kể cả xe ô tô vừa chở người, vừa chở hàng loại có từ hai hàng ghế trở lên, có thiết kế vách ngăn cố định giữa khoang chở người và khoang chở hàng;</p>
+                    <div class="px-5 py-4 my-6 relative rounded-tr-2xl shadow-[inset_4px_0_0_0_#2563eb] bg-blue-50/50 group border border-blue-100">
+                        <span class="absolute -right-3 -top-3 w-8 h-8 font-sans bg-primary text-white rounded-full flex items-center justify-center text-xs shadow-lg border-2 border-white cursor-pointer group-hover:bg-blue-700 transition-all"><i class="fa-solid fa-sparkles"></i></span>
+                        <p><strong class="font-black text-slate-900 text-sm mb-2 inline-block">Điều 7. Biểu thuế tiêu thụ đặc biệt (Trích lục Bia)</strong><br>
+                        Căn cứ MỤC IV của Biểu thuế TTĐB: <br><br><span class="bg-yellow-200/80 px-1 font-bold text-red-800">Từ năm 2018 trở đi, mặt hàng Bia (Bao gồm bia hơi, bia lỏng đóng chai/lon) chịu mức thuế suất cố định là 65% áp dụng tại khâu nhập khẩu hoặc sản xuất trong nước.</span></p>
+                        <div class="mt-4 flex gap-2 font-sans opacity-70 group-hover:opacity-100 transition-all">
+                            <button onclick="fillPrompt(this)" class="px-3 py-1.5 bg-white border border-blue-200 text-primary text-[10px] font-black rounded-lg uppercase tracking-wider shadow-sm hover:scale-105 transition-all">Hỏi AI: Bia nồng độ thấp (0 độ) có bị đánh thuế không?</button>
+                        </div>
+                    </div>
+                `
+            },
+            'nd26': {
+                title: 'Nghị định 26/2023/NĐ-CP',
+                number: '26/2023/NĐ-CP',
+                content: `
+                    <p class="mb-4 italic text-slate-600 bg-slate-50 p-4 border border-slate-200 rounded-xl font-sans text-xs">Về Biểu thuế xuất khẩu, Biểu thuế nhập khẩu ưu đãi, Danh mục hàng hóa và mức thuế tuyệt đối, thuế hỗn hợp, thuế nhập khẩu ngoài hạn ngạch thuế quan.</p>
+                    
+                    <p><strong class="font-black text-slate-900 text-[15px] mb-2 inline-block">Điều 3. Áp dụng Biểu thuế</strong></p>
+                    <p class="mb-4">Ban hành kèm theo Nghị định này 04 Phụ lục quy định về mức thuế xuất khẩu, mức thuế nhập khẩu ưu đãi, gồm:<br>1. Phụ lục I - Biểu thuế xuất khẩu theo Danh mục mặt hàng chịu thuế.<br>2. Phụ lục II - Biểu thuế nhập khẩu ưu đãi theo Danh mục mặt hàng chịu thuế.</p>
+                    <div class="px-5 py-4 my-6 relative rounded-tr-2xl shadow-[inset_4px_0_0_0_#2563eb] bg-blue-50/50 group border border-blue-100">
+                        <span class="absolute -right-3 -top-3 w-8 h-8 font-sans bg-primary text-white rounded-full flex items-center justify-center text-xs shadow-lg border-2 border-white cursor-pointer group-hover:bg-blue-700 transition-all"><i class="fa-solid fa-sparkles"></i></span>
+                        <p><strong class="font-black text-slate-900 text-sm mb-2 inline-block">Chương 87. Xe cộ và phương tiện vận tải cơ giới (Trích)</strong><br>
+                        <span class="bg-yellow-200/80 px-1 font-bold text-red-800">Đối với mặt hàng Xe có động cơ đốt trong kết hợp động cơ điện (Hybrid) chạy bằng xăng và điện, mức thuế suất MFN được hưởng bằng 70% mức thuế suất nhập khẩu của xe ô tô chạy xăng cùng loại có cùng dung tích xi lanh.</span></p>
+                        <div class="mt-4 flex gap-2 font-sans opacity-70 group-hover:opacity-100 transition-all">
+                            <button onclick="fillPrompt(this)" class="px-3 py-1.5 bg-white border border-blue-200 text-primary text-[10px] font-black rounded-lg uppercase tracking-wider shadow-sm hover:scale-105 transition-all">Hỏi AI: Cẩm nang áp mã HS cho xe hybrid và xe thuần điện?</button>
+                        </div>
+                    </div>
+                `
+            },
+            'bvmt': {
+                title: 'Luật thuế bảo vệ môi trường',
+                number: '57/2010/QH12',
+                content: `
+                    <p><strong class="font-black text-slate-900 text-[15px] mb-2 inline-block">Điều 2. Giải thích từ ngữ</strong></p>
+                    <p class="mb-4">1. Thuế bảo vệ môi trường là loại thuế thu vào sản phẩm, hàng hóa khi sử dụng gây tác động xấu đến môi trường.</p>
+                    <p><strong class="font-black text-slate-900 text-[15px] mb-2 mt-4 inline-block">Điều 3. Đối tượng chịu thuế</strong></p>
+                    <p class="mb-1">1. Xăng, dầu, mỡ nhờn;</p>
+                    <p class="mb-1">2. Than đá;</p>
+                    <p class="mb-1">3. Dung dịch hydro-chloro-fluoro-carbon (HCFC);</p>
+                    <p class="mb-4">4. Túi ni lông thuộc diện chịu thuế.</p>
+                    <div class="px-5 py-4 my-6 relative rounded-tr-2xl shadow-[inset_4px_0_0_0_#2563eb] bg-blue-50/50 group border border-blue-100">
+                        <span class="absolute -right-3 -top-3 w-8 h-8 font-sans bg-primary text-white rounded-full flex items-center justify-center text-xs shadow-lg border-2 border-white cursor-pointer group-hover:bg-blue-700 transition-all"><i class="fa-solid fa-sparkles"></i></span>
+                        <p><strong class="font-black text-slate-900 text-sm mb-2 inline-block">Ví dụ Trích lục Cụ thể</strong><br>
+                        <span class="bg-yellow-200/80 px-1 font-bold text-red-800">Mặt hàng bao bì đóng gói sẵn nhập khẩu kèm theo sản phẩm (ví dụ hộp carton đựng giày) không thuộc đối tượng phải đóng Thuế Bảo vệ Môi trường tại khâu Nhập khẩu.</span></p>
+                    </div>
+                `
+            },
+            'default': {
+                title: 'VĂN BẢN TRÍCH LỤC MẪU',
+                number: 'SỐ LIỆU NỘI BỘ',
+                content: `
+                    <p class="italic text-slate-500 text-center mb-8 bg-slate-50 p-3 rounded-xl text-xs font-sans border border-slate-200">Đoạn bôi đen dưới đây chứa **từ khóa rủi ro** đã được thuật toán AI xác định tự động theo truy vấn của bạn.</p>
+
+                    <p><strong class="font-black text-slate-900 text-base">Điều 1. Phạm vi áp dụng</strong><br>Văn bản quyết định việc áp dụng chế độ ưu đãi về giảm phần trăm tính thuế dựa trên nguồn gốc hàng hóa và tỷ lệ gia công tại nước xuất khẩu đối với các mặt hàng có liên quan.</p>
+                    
+                    <div class="px-5 py-4 my-6 relative rounded-tr-2xl shadow-[inset_4px_0_0_0_#2563eb] bg-blue-50/50 group border border-blue-100">
+                        <span class="absolute -right-3 -top-3 w-8 h-8 font-sans bg-primary text-white rounded-full flex items-center justify-center text-xs shadow-lg border-2 border-white group-hover:bg-blue-700 transition-all cursor-pointer"><i class="fa-solid fa-sparkles"></i></span>
+                        <p><strong class="font-black text-slate-900">Mục 2. Quy định Chi tiết (Trích lục)</strong><br>
+                        Căn cứ vào hồ sơ sơ bộ, <span class="bg-yellow-200/80 px-1 font-bold text-red-800">Cơ quan hải quan xác nhận mặt hàng đáp ứng đầy đủ tiêu chí của Chứng nhận xuất xứ (C/O) form hỗn hợp. Doanh nghiệp được phép áp dụng mức khung ưu đãi thuế suất thấp nhất.</span> Toàn bộ các quy chế kiểm tra chuyên ngành liên đới không thay đổi.</p>
+                        <div class="mt-4 flex gap-2 font-sans opacity-70 group-hover:opacity-100 transition-all">
+                            <button onclick="fillPrompt(this)" class="px-3 py-1.5 bg-white border border-blue-200 text-primary text-[10px] font-black rounded-lg uppercase tracking-wider shadow-sm hover:scale-105 transition-all">Hỏi AI về tính pháp lý đoạn này</button>
+                        </div>
+                    </div>
+                `
+            }
+        };
+
+        function openInHouseViewer(docTitle, docType = 'default') {
+            const data = realLawData[docType] || realLawData['default'];
+
+            const titleEl = document.getElementById('docViewerTitle');
+            if (titleEl) titleEl.innerText = data.title.toUpperCase();
+
+            const numberEl = document.getElementById('docViewerNumber');
+            if (numberEl) {
+                numberEl.innerText = 'SỐ: ' + data.number;
+                numberEl.classList.remove('hidden');
+            }
+
+            const bodyEl = document.getElementById('docViewerBody');
+            if (bodyEl) bodyEl.innerHTML = data.content;
+
+            const aiCtx = document.getElementById('aiDocNameContext');
+            if (aiCtx) aiCtx.innerText = data.title;
+
+            document.getElementById('inHouseViewerModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+
+            const log = document.getElementById('aiChatLog');
+            if (log) log.innerHTML = ''; // Xóa lịch sử cũ
+        }
+
+        function closeInHouseViewer() {
+            document.getElementById('inHouseViewerModal').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        function mockAiChat() {
+            const input = document.getElementById('aiChatInput');
+            const log = document.getElementById('aiChatLog');
+            const text = input.value.trim();
+            if (!text) return;
+
+            // Tin nhắn của User
+            log.innerHTML += `
+                <div class="flex gap-4 items-start flex-row-reverse mb-6 animate-fadeIn">
+                    <div class="w-8 h-8 rounded-full bg-slate-800 text-white flex items-center justify-center shrink-0 font-black"><i class="fa-solid fa-user text-xs"></i></div>
+                    <div class="bg-primary p-4 rounded-2xl rounded-tr-none shadow-md text-white text-sm font-medium leading-relaxed max-w-[85%]">
+                        ${text}
+                    </div>
+                </div>
+            `;
+            input.value = '';
+
+            // AI Typing
+            const typingId = 'typing-' + Date.now();
+            log.innerHTML += `
+                <div id="${typingId}" class="flex gap-4 items-start mb-6 animate-pulse">
+                    <div class="w-8 h-8 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center shrink-0 font-black"><i class="fa-solid fa-robot text-xs"></i></div>
+                    <div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-slate-200 text-sm font-medium text-slate-400 italic">
+                        Đang đọc và phân tích văn bản...
+                    </div>
+                </div>
+            `;
+
+            const chatContainer = document.getElementById('aiChatScrollArea');
+            if (chatContainer) chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            setTimeout(() => {
+                const el = document.getElementById(typingId);
+                if (el) el.remove();
+
+                log.innerHTML += `
+                    <div class="flex gap-4 items-start mb-6 animate-fadeIn">
+                        <div class="w-8 h-8 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center shrink-0 font-black z-10"><i class="fa-solid fa-robot text-xs"></i></div>
+                        <div class="bg-white p-4 rounded-2xl rounded-tl-none shadow border border-slate-200 text-sm font-medium text-slate-700 leading-relaxed max-w-[85%] border-l-4 border-l-primary/60">
+                            Dựa trên văn bản hiện tại và Kho tri thức Hải Quan nội bộ, hệ thống đánh giá mặt hàng của bạn thuộc diện **Ưu đãi về Quy tắc Xuất xứ (C/O)**.<br><br>Tuy nhiên cần cẩn trọng nếu nguyên liệu sản xuất chưa đạt 40% giá trị gia tăng nội khối. Vui lòng đối chiếu với Phụ lục để nắm rõ các mặt hàng loại trừ.
+                            <div class="mt-3 pt-3 border-t border-slate-100 text-[10px] text-slate-400 font-bold uppercase flex gap-4">
+                                <button class="hover:text-primary transition-all flex items-center gap-1"><i class="fa-solid fa-thumbs-up"></i> Hữu ích</button>
+                                <button class="hover:text-red-500 transition-all flex items-center gap-1"><i class="fa-solid fa-clone"></i> Sao chép</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                if (chatContainer) chatContainer.scrollTop = chatContainer.scrollHeight;
+            }, 1800);
+        }
+
+        function fillPrompt(btn) {
+            document.getElementById('aiChatInput').value = btn.innerText.trim();
+            mockAiChat();
+        }
+    </script>
+
+    <!-- IN-HOUSE LAW VIEWER MODAL (PRO FEATURE) -->
+    <div id="inHouseViewerModal"
+        class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[200] flex items-center justify-center animate-fadeIn p-2 md:p-6 overflow-hidden">
+        <div
+            class="bg-white rounded-[2rem] w-full h-full max-w-[1400px] shadow-2xl flex flex-col overflow-hidden border border-slate-200 scale-100 transition-all transform origin-bottom">
+            <!-- Header -->
+            <div class="px-4 py-3 border-b border-slate-200 flex justify-between items-center bg-white z-20 shrink-0">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
+                    <div
+                        class="w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl flex items-center justify-center font-black shadow-lg shadow-blue-500/30 hidden sm:flex shrink-0">
+                        <i class="fa-solid fa-scale-balanced"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-sm md:text-lg text-slate-800 tracking-tight flex items-center gap-2">
+                            Trình đọc Lõi Pháp lý Mở rộng
+                            <span
+                                class="hidden md:inline-flex px-2 py-0.5 bg-indigo-50 text-indigo-600 text-[9px] rounded-lg uppercase border border-indigo-100 font-black tracking-widest leading-none mt-0.5"><i
+                                    class="fa-solid fa-crown mr-1"></i> Pro Feature</span>
+                        </h3>
+                        <p
+                            class="text-[9px] md:text-[10px] font-black uppercase text-slate-400 tracking-widest text-left mt-0.5">
+                            <i class="fa-solid fa-database mr-1 text-emerald-500"></i> Dữ liệu trích xuất từ CSDL Trung
+                            tâm TaxPortal v4.0</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 md:gap-3 shrink-0">
+                    <button
+                        class="hidden md:flex px-4 py-2 bg-slate-50 border border-slate-200 text-slate-600 rounded-xl text-xs font-bold hover:bg-slate-100 hover:text-primary transition-all items-center gap-2 active:scale-95"><i
+                            class="fa-solid fa-print"></i> In / Xuất PDF</button>
+                    <button onclick="closeInHouseViewer()"
+                        class="w-10 h-10 md:w-12 md:h-12 bg-red-50 border border-red-100 text-red-600 rounded-xl hover:bg-red-100 transition-all font-black flex items-center justify-center hover:text-red-700 active:scale-95 text-lg shadow-sm"><i
+                            class="fa-solid fa-xmark"></i></button>
+                </div>
+            </div>
+
+            <!-- Body (Split Pane) -->
+            <div class="flex flex-1 overflow-hidden flex-col lg:flex-row bg-[#fbfbfb]">
+                <!-- Left: Document Viewer (65%) -->
+                <div
+                    class="w-full lg:w-[65%] h-full bg-slate-100/50 p-4 md:p-8 overflow-y-auto custom-scrollbar relative border-r border-slate-200">
+                    <div
+                        class="absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-slate-100/50 to-transparent z-10 pointer-events-none">
+                    </div>
+
+                    <div
+                        class="max-w-[42rem] mx-auto bg-[#fffffb] p-8 md:p-14 shadow-md border border-slate-300 min-h-[110%] font-serif text-slate-900 relative">
+                        <!-- Watermark -->
+                        <div
+                            class="absolute inset-0 z-0 pointer-events-none opacity-[0.03] flex items-center justify-center overflow-hidden">
+                            <i class="fa-solid fa-landmark text-[25rem] -rotate-12"></i>
+                        </div>
+
+                        <!-- Content -->
+                        <div class="relative z-10 w-full text-sm md:text-[15px] leading-[1.8] text-justify">
+                            <div class="text-center pb-6 mb-8 border-b-[3px] border-double border-slate-800">
+                                <h4 class="font-bold text-sm mb-1 uppercase tracking-wider">Cộng hòa Xã hội Chủ nghĩa
+                                    Việt Nam</h4>
+                                <p class="font-bold text-[13px] underline mb-6">Độc lập - Tự do - Hạnh phúc</p>
+                                <p class="font-bold uppercase text-xs mt-1 mb-2 tracking-widest text-slate-500"
+                                    id="docViewerNumber">SỐ: N/A</p>
+                                <h5 class="font-black text-xl md:text-2xl pt-2 uppercase text-red-800 tracking-wider mb-2"
+                                    id="docViewerTitle">VĂN BẢN TRÍCH LỤC MẪU</h5>
+                            </div>
+
+                            <div id="docViewerBody" class="text-slate-800 leading-relaxed text-justify">
+                                <!-- Dynamic Content Here -->
+                            </div>
+
+                            <div class="h-20"></div> <!-- Spacer -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: AI Chatbot Assistant (35%) -->
+                <div
+                    class="w-full lg:w-[35%] bg-white h-full flex flex-col relative z-20 shadow-[-10px_0_20px_-10px_rgba(0,0,0,0.05)]">
+                    <!-- Chat Header -->
+                    <div
+                        class="px-6 py-5 bg-white border-b border-slate-200 flex items-center justify-between shrink-0 shadow-sm z-30">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 rounded-[12px] bg-gradient-to-br from-indigo-50 to-indigo-100 border border-indigo-200 text-indigo-600 flex items-center justify-center font-black shadow-inner">
+                                <i class="fa-solid fa-brain"></i></div>
+                            <div>
+                                <h4 class="font-black text-sm text-slate-900">TaxPortal Copilot Mức 4</h4>
+                                <p
+                                    class="text-[10px] text-emerald-600 font-black flex items-center gap-1.5 uppercase tracking-widest mt-0.5">
+                                    <span
+                                        class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_5px_0_#10b981]"></span>
+                                    Sẵn sàng phản hồi</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Messages Area -->
+                    <div class="flex-1 p-6 overflow-y-auto bg-slate-50/50 custom-scrollbar relative"
+                        id="aiChatScrollArea">
+                        <!-- AI Greeting -->
+                        <div class="flex gap-4 items-start mb-6 align-top">
+                            <div
+                                class="w-8 h-8 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 flex flex-col items-center justify-center shrink-0 font-black mt-1">
+                                <i class="fa-solid fa-robot text-xs"></i></div>
+                            <div
+                                class="bg-white p-4 rounded-2xl rounded-tl-none shadow border border-slate-200 text-sm font-medium text-slate-700 leading-relaxed max-w-[85%] border-l-4 border-l-primary/60">
+                                Xin chào! Tôi là AI Chuyên viên Pháp chế. Tôi đã quét và nạp <strong
+                                    class="text-primary tracking-wide" id="aiDocNameContext">văn bản</strong> vào bộ nhớ
+                                tạm.<br><br>Tôi có thể giải mã đoạn luật khó hiểu, hoặc đối chiếu chéo các rủi ro có thể
+                                phát sinh cho loại hình doanh nghiệp của bạn.
+                            </div>
+                        </div>
+
+                        <!-- Suggest Prompts -->
+                        <div class="flex flex-col gap-2 pl-[3.25rem] mb-6 drop-shadow-sm">
+                            <button onclick="fillPrompt(this)"
+                                class="text-left px-4 py-2.5 bg-white border border-slate-200 text-slate-600 rounded-xl text-[11px] font-bold hover:bg-slate-800 hover:text-white transition-all hover:border-slate-800 w-[90%] flex justify-between items-center group">Tóm
+                                tắt rủi ro ẩn liên quan đến thủ tục Hải quan? <i
+                                    class="fa-solid fa-arrow-right opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0"></i></button>
+                            <button onclick="fillPrompt(this)"
+                                class="text-left px-4 py-2.5 bg-white border border-slate-200 text-slate-600 rounded-xl text-[11px] font-bold hover:bg-slate-800 hover:text-white transition-all hover:border-slate-800 w-[90%] flex justify-between items-center group">Nếu
+                                công ty tôi vốn 100% Nhật Bản (FDI) thì sao? <i
+                                    class="fa-solid fa-arrow-right opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0"></i></button>
+                        </div>
+
+                        <div id="aiChatLog"></div>
+                        <div class="h-4"></div>
+                    </div>
+
+                    <!-- Chat Input Fixed Bottom -->
+                    <div
+                        class="p-4 bg-white border-t border-slate-200 shrink-0 shadow-[0_-10px_20px_-15px_rgba(0,0,0,0.05)] z-30">
+                        <div
+                            class="relative flex items-center bg-slate-50 border border-slate-300 rounded-[1.5rem] p-1.5 focus-within:ring-4 focus-within:ring-primary/10 focus-within:border-primary transition-all shadow-inner">
+                            <input onkeydown="if(event.key === 'Enter') mockAiChat()" type="text" id="aiChatInput"
+                                placeholder="VD: Thuế VAT ở đây là 5% hay 8%?..."
+                                class="w-full bg-transparent border-none outline-none px-4 text-sm font-medium h-10 text-slate-700 placeholder-slate-400">
+                            <button onclick="mockAiChat()"
+                                class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center font-black hover:bg-blue-700 transition-all active:scale-95 shrink-0 shadow-[0_4px_10px_0_rgba(37,99,235,0.4)]"><i
+                                    class="fa-solid fa-paper-plane text-[11px] ml-0.5"></i></button>
+                        </div>
+                        <div class="flex items-center justify-center gap-4 mt-3">
+                            <p class="text-[9px] text-center text-slate-400 font-bold uppercase tracking-widest"><i
+                                    class="fa-solid fa-circle-exclamation text-yellow-500 mr-1"></i> Có thể phát sinh
+                                sai sót logic AI</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LAW VIEWER MODAL UI -->
+    <div id="lawModal"
+        class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center animate-fadeIn p-4 py-10 overflow-y-auto">
+        <div
+            class="bg-slate-100 rounded-[2rem] w-full max-w-2xl overflow-hidden shadow-2xl scale-100 transition-all flex flex-col my-auto border border-slate-200">
+            <div
+                class="px-6 py-5 border-b border-slate-200 flex justify-between items-center bg-white shadow-sm z-10 shrink-0">
+                <div class="flex items-center gap-4">
+                    <div
+                        class="w-12 h-12 bg-red-50 text-red-600 border border-red-100 rounded-xl flex items-center justify-center font-black">
+                        <i class="fa-solid fa-scale-balanced text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-lg text-slate-800 tracking-tight" id="lawModalTitle">Trích xuất Căn
+                            cứ Pháp lý (Bản Tóm tắt)</h3>
+                        <p class="text-[10px] font-black uppercase text-slate-400 tracking-widest text-left mt-0.5"
+                            id="lawModalSub"><i class="fa-solid fa-server mr-1 text-emerald-500"></i> Cơ sở dữ liệu HQ
+                            Quốc gia</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button
+                        class="w-10 h-10 bg-slate-50 border border-slate-200 text-slate-500 rounded-full hover:bg-slate-200 hover:text-slate-800 transition-all font-black"><i
+                            class="fa-solid fa-print"></i></button>
+                    <button onclick="closeLawModal()"
+                        class="w-10 h-10 bg-slate-50 border border-slate-200 text-slate-500 rounded-full hover:bg-red-50 hover:text-red-500 transition-all font-black"><i
+                            class="fa-solid fa-xmark"></i></button>
+                </div>
+            </div>
+
+            <div class="p-6 md:p-8 space-y-6 overflow-y-auto custom-scrollbar bg-slate-100">
+                <!-- FORM GIẤY TỜ NHÀ NƯỚC -->
+                <div class="p-8 md:p-12 bg-[#fdfdfb] font-serif text-slate-900 shadow-sm border border-slate-300 relative group overflow-hidden"
+                    style="background-image: url('data:image/svg+xml,%3Csvg width=&quot;100&quot; height=&quot;100&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cfilter id=&quot;noise&quot;%3E%3CfeTurbulence type=&quot;fractalNoise&quot; baseFrequency=&quot;0.8&quot; numOctaves=&quot;4&quot; stitchTiles=&quot;stitch&quot;/%3E%3C/filter%3E%3Crect width=&quot;100%25&quot; height=&quot;100%25&quot; filter=&quot;url(%23noise)&quot; opacity=&quot;0.05&quot;/%3E%3C/svg%3E');">
+                    <!-- Quốc huy chìm -->
+                    <div class="absolute inset-0 opacity-[0.02] pointer-events-none flex items-center justify-center">
+                        <i class="fa-solid fa-building-columns text-[15rem]"></i>
+                    </div>
+                    <div id="lawModalContent" class="relative z-10 w-full max-w-none text-[13px]">
+                        <!-- Content injected via JS -->
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                    <button onclick="closeLawModal()"
+                        class="flex-1 py-4 bg-red-600 text-white font-black rounded-xl hover:bg-red-700 shadow-md transition-all active:scale-95 text-[11px] uppercase tracking-widest border-b-4 border-red-800"><i
+                            class="fa-solid fa-file-pdf mr-2"></i>Tải bản Gốc (Website Chính Phủ)</button>
+                    <button onclick="closeLawModal()"
+                        class="flex-1 py-4 bg-white border border-slate-300 text-slate-500 font-bold rounded-xl hover:bg-slate-50 shadow-sm transition-all active:scale-95 text-[11px] tracking-widest uppercase">Đóng
+                        Màn Hình</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

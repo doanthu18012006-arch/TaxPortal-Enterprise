@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaxPortal VN | Super Platform v3.5 (CACHE CLEAR)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .glass { background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.3); }
+        .nav-item.active { color: #2563eb; background: rgba(37, 99, 235, 0.08); border-radius: 12px; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        body { background: #f8fafc; font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+</head>
+<body>
+    <nav class="fixed top-0 w-full z-[100] glass border-b border-slate-200/50 px-6 py-3">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-2" onclick="location.reload()">
+                <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg"><i class="fa-solid fa-brain"></i></div>
+                <span class="text-xl font-extrabold tracking-tighter">TaxPortal <span class="text-blue-600 italic">SUPER V3.5</span></span>
+            </div>
+            <div class="flex items-center gap-1 font-bold text-[13px] text-slate-500">
+                <button class="nav-item active px-5 py-2">Trang chủ</button>
+                <button class="nav-item px-5 py-2">Dashboard</button>
+                <button class="nav-item px-5 py-2">Máy tính Thuế</button>
+            </div>
+        </div>
+    </nav>
+    <main class="pt-32 text-center space-y-8">
+        <h1 class="text-6xl font-black">XÁC THỰC V3.5 THÀNH CÔNG</h1>
+        <p class="text-xl text-slate-500 font-bold">Nếu bạn thấy dòng chữ này, bản cập nhật đã được ghi vào đĩa.</p>
+    </main>
+</body>
+</html>
